@@ -1,4 +1,10 @@
+##Este código implementa as operações CRUD (Create, Read, Update, Delete) para um sistema de gerenciamento de entregas usando MongoDB. Ele define funções para criar novos documentos em coleções de clientes, entregadores, encomendas e pedidos, bem como para ler documentos existentes. As funções de leitura permitem obter todos os documentos ou um documento específico por ID. O código inclui exemplos de uso para testar as funções criadas.
 from database import clientes, entregadores, pedidos, encomendas
+from bson import ObjectId
+
+
+##CRUD - Create, Read, Update, Delete
+##Create - Criar um novo documento
 
 def create_cliente(nome, cpf, localizacao):
     cliente = {
@@ -28,6 +34,7 @@ def create_encomenda(nome, quantidade):
     resultado = encomendas.insert_one(encomenda)
     return resultado.inserted_id
 
+
 def create_pedido(id_cliente, id_entregador, id_encomenda, status):
     pedido = {
         "id_cliente": id_cliente,
@@ -39,7 +46,60 @@ def create_pedido(id_cliente, id_entregador, id_encomenda, status):
     return resultado.inserted_id
 
 
-##print(create_cliente("João Silva", "123.456.789-00", "Rua A, 123"))
-##print(create_entregador("Maria Souza", "987.654.321-00", "11987654321"))
-##print(create_encomenda("Pizza", 2))
-##print(create_pedido("64b8c9f1e1d2c3a4b5c6d7e", "64b8ca02e1d2c3a4b5c6d7f", "64b8ca0be1d2c3a4b5c6d800", "Pendente"))
+
+##CRUD - Read - Ler os documentos existentes (todos)
+
+def read_clientes():
+    return list(clientes.find())
+
+
+def read_entregadores():
+    return list(entregadores.find())
+
+
+def read_encomendas():
+    return list(encomendas.find())
+
+
+def read_pedidos():
+    return list(pedidos.find())
+
+
+
+##CRUD - Read - Ler um documento específico (por ID)
+
+def read_cliente(id_cliente):
+    return clientes.find_one({"_id": ObjectId(id_cliente)})
+
+def read_entregador(id_entregador):
+    return entregadores.find_one({"_id": ObjectId(id_entregador)})
+
+def read_encomenda(id_encomenda):
+    return encomendas.find_one({"_id": ObjectId(id_encomenda)})
+
+def read_pedido(id_pedido):
+    return pedidos.find_one({"_id": ObjectId(id_pedido)})
+
+
+
+#IMPUT DE TESTE
+
+#IMPUT CREATE
+#print(create_cliente("João Silva", "123.456.789-00", "Rua A, 123"))
+#print(create_entregador("Maria Souza", "987.654.321-00", "11987654321"))
+#print(create_encomenda("Pizza", 2))
+#print(create_pedido("64b8c9f1e1d2c3a4b5c6d7e", "64b8ca02e1d2c3a4b5c6d7f", "64b8ca0be1d2c3a4b5c6d800", "Pendente"))
+
+#IMPUT READ ALL
+#print(read_clientes())
+#print(read_entregadores())
+#print(read_encomendas())
+#print(read_pedidos())
+
+#IMPUT READ ID
+print(read_cliente("69af9db58dadf2424c4b31b6"))
+print(read_entregador("69afaedac7f68cc6ec575979"))
+print(read_encomenda("69afaedac7f68cc6ec57597a"))
+print(read_pedido("69afaedac7f68cc6ec57597b"))
+
+
