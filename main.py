@@ -47,6 +47,13 @@ def create_pedido(id_cliente, id_entregador, id_encomenda, status):
 
 
 
+def toString(bd):
+    lista = bd
+    for i in lista.find():
+        for chave, valor in i.items():
+            print(f"{chave}:{valor}")
+
+
 ##CRUD - Read - Ler os documentos existentes (todos)
 
 def read_clientes():
@@ -65,7 +72,6 @@ def read_pedidos():
     return list(pedidos.find())
 
 
-
 ##CRUD - Read - Ler um documento específico (por ID)
 
 def read_cliente(id_cliente):
@@ -80,6 +86,62 @@ def read_encomenda(id_encomenda):
 def read_pedido(id_pedido):
     return pedidos.find_one({"_id": ObjectId(id_pedido)})
 
+
+
+##CRUD - Update - Atualizar um documento existente (por ID)
+
+def update_cliente(id_cliente, nome=None, cpf=None, localizacao=None):
+    update_fields = {}
+    if nome:
+        update_fields["nome"] = nome
+    if cpf:
+        update_fields["cpf"] = cpf
+    if localizacao:
+        update_fields["localizacao"] = localizacao
+    clientes.update_one({"_id": ObjectId(id_cliente)},{"$set": update_fields})
+
+def update_entregador(id_entregador,nome=None, cpf=None, telefone=None):
+    update_fields = {}
+    if nome:
+        update_fields["nome"] = nome
+    if cpf:
+        update_fields["cpf"] = cpf 
+    if telefone:
+        update_fields["telefone"] = telefone 
+    entregadores.update_one({"_id": ObjectId(id_entregador)},{"$set":update_fields})
+
+def update_encomenda(id_encomenda, nome=None, quantidade=None):
+    update_fields = {}
+    if nome:
+        update_fields["nome"] = nome
+    if quantidade:
+        update_fields["quantidade"] = quantidade
+    encomendas.update_one({"_id":ObjectId(id_encomenda)},{"$set":update_fields})
+
+def update_pedido(id_pedido, id_cliente=None, id_entregador=None, id_encomenda=None):
+    update_fields = {}
+    if id_cliente:
+        update_fields["id_cliente"] = id_cliente
+    if id_entregador:
+        update_fields["id_entregador"] = id_entregador
+    if id_encomenda:
+        update_fields["id_encomenda"] = id_encomenda
+    pedidos.update_one({"_id":ObjectId(id_pedido)},{"$set":(update_fields)})
+
+
+##CRUD - Delete - Atualizar um documento existente (por ID) 
+
+def drop_cliente(id_cliente):
+    clientes.delete_one({"_id": ObjectId(id_cliente)})
+
+def drop_entregador(id_entregador):
+    entregadores.delete_one({"_id": ObjectId(id_entregador)})
+
+def drop_encomenda(id_encomenda):
+    encomendas.delete_one({"_id": ObjectId(id_encomenda)})
+
+def drop_pedido(id_pedido):
+    pedidos.delete_one({"_id": ObjectId(id_pedido)})
 
 
 #IMPUT DE TESTE
@@ -97,9 +159,17 @@ def read_pedido(id_pedido):
 #print(read_pedidos())
 
 #IMPUT READ ID
-print(read_cliente("69af9db58dadf2424c4b31b6"))
-print(read_entregador("69afaedac7f68cc6ec575979"))
-print(read_encomenda("69afaedac7f68cc6ec57597a"))
-print(read_pedido("69afaedac7f68cc6ec57597b"))
+#print(read_cliente("69af9db58dadf2424c4b31b6"))
+#print(read_entregador("69afaedac7f68cc6ec575979"))
+#print(read_encomenda("69afaedac7f68cc6ec57597a"))
+#print(read_pedido("69afaedac7f68cc6ec57597b"))
 
+#IMPUT UPDATE
+#print(update_cliente("69af9db58dadf2424c4b31b6","Marlon De Jesus Santos", "093.562.562-00","Con Vila Esperança"))
+#fazer
 
+#IMPUT DROP
+#print(drop_cliente("69afacff93e972f96d1b0f47"))
+#fazer
+
+#toString(clientes)
