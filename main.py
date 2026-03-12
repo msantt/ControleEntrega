@@ -13,7 +13,7 @@ def create_cliente(nome, cpf, localizacao):
         "localizacao": localizacao
     }
     resultado = clientes.insert_one(cliente)
-    return resultado.inserted_id
+    return str(resultado.inserted_id)
 
 
 def create_entregador(nome, cpf, telefone):
@@ -23,7 +23,7 @@ def create_entregador(nome, cpf, telefone):
         "telefone": telefone
     }
     resultado = entregadores.insert_one(entregador)
-    return resultado.inserted_id
+    return str(resultado.inserted_id)
 
 
 def create_encomenda(nome, quantidade):
@@ -32,7 +32,7 @@ def create_encomenda(nome, quantidade):
         "quantidade": quantidade
     }
     resultado = encomendas.insert_one(encomenda)
-    return resultado.inserted_id
+    return str(resultado.inserted_id)
 
 
 def create_pedido(id_cliente, id_entregador, id_encomenda, status):
@@ -43,7 +43,7 @@ def create_pedido(id_cliente, id_entregador, id_encomenda, status):
         "status": status
     }
     resultado = pedidos.insert_one(pedido)
-    return resultado.inserted_id
+    return str(resultado.inserted_id)
 
 
 
@@ -57,34 +57,54 @@ def toString(bd):
 ##CRUD - Read - Ler os documentos existentes (todos)
 
 def read_clientes():
-    return list(clientes.find())
+    resultado = list(clientes.find())
+    for i in resultado:
+        convertId(i)
+    return resultado
 
 
 def read_entregadores():
-    return list(entregadores.find())
+    resultado = list(entregadores.find())
+    for i in resultado:
+        convertId(i)
+    return resultado
 
 
 def read_encomendas():
-    return list(encomendas.find())
+    resultado = list(encomendas.find())
+    for i in resultado:
+        convertId(i)
+    return resultado
 
 
 def read_pedidos():
-    return list(pedidos.find())
+    resultado = list(pedidos.find())
+    for i in resultado:
+        convertId(i)
+    return resultado
 
 
 ##CRUD - Read - Ler um documento específico (por ID)
 
 def read_cliente(id_cliente):
-    return clientes.find_one({"_id": ObjectId(id_cliente)})
+    result = clientes.find_one({"_id": ObjectId(id_cliente)})
+    convertId(result)
+    return result
 
 def read_entregador(id_entregador):
-    return entregadores.find_one({"_id": ObjectId(id_entregador)})
+    result = entregadores.find_one({"_id": ObjectId(id_entregador)})
+    convertId(result)
+    return result
 
 def read_encomenda(id_encomenda):
-    return encomendas.find_one({"_id": ObjectId(id_encomenda)})
+    result = encomendas.find_one({"_id": ObjectId(id_encomenda)})
+    convertId(result)
+    return result
 
 def read_pedido(id_pedido):
-    return pedidos.find_one({"_id": ObjectId(id_pedido)})
+    result = pedidos.find_one({"_id": ObjectId(id_pedido)})
+    convertId(result)
+    return result
 
 
 
@@ -173,3 +193,11 @@ def drop_pedido(id_pedido):
 #fazer
 
 #toString(clientes)
+
+
+
+#FUNCIONS -ALLS-
+
+def convertId(bd):
+    bd["_id"] = str(bd["_id"])
+    return bd
