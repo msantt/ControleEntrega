@@ -14,3 +14,9 @@ Melhoria e redução de perdas de produtos,  garantir um serviço eficaz e cumpr
 - MongoDB
 - FastAPI (em breve)
 - HTML/CSS (em breve)
+
+## Etapas
+▣ DATABASE: Tables and References;
+▣ API: Entities, (Process...);
+▣ FAST API: Create, Read, Put and Delete;
+▢ INTERFACE: (Process...);
