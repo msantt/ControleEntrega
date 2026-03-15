@@ -40,6 +40,7 @@ body{
 .header nav ul{
     margin: 0;
     padding: 0;
+    gap: 2em;
     display: flex;
     padding-bottom: 20px;
 }
@@ -93,9 +94,11 @@ section h2{
     background: var(--white);
     border: 2px solid var(--gray);
     border-radius: 12px;
-    padding: 1em;
+    padding: 0.5em;
+
     min-width: 260px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+
     align-content: center;
     align-items: center;
     justify-content: center;
@@ -113,7 +116,7 @@ section h2{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 1em;
+    margin: 0.4em;
 }
 
 .card-icon i {
@@ -142,9 +145,10 @@ section h2{
 
 .card-label{
     font-size: 1.4em;
-    padding: 1em;
+    padding: 0.8em;
 }
 
 .card-value{
     font-size: 2em;
+    margin-bottom: 0.4em;
 }
