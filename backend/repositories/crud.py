@@ -1,14 +1,19 @@
 from bson import ObjectId
+from bson.errors import InvalidId
+from fastapi import HTTPException
 from database import clientes, entregadores, pedidos, encomendas
 
 #UTEIS
-
 
 def convertId(bd):
     bd["_id"] = str(bd["_id"])
     return bd
 
-
+def validar_id(id:str):
+    try:
+        return ObjectId(id)
+    except InvalidId:
+        raise HTTPException(status_code=400, detail="ID Inválido")
 
 
 #CREATE
@@ -93,24 +98,20 @@ def read_pedidos():
 ##CRUD - Read - Ler um documento específico (por ID)
 
 def read_cliente(id_cliente):
-    result = clientes.find_one({"_id": ObjectId(id_cliente)})
-    convertId(result)
-    return result
+    result = clientes.find_one({"_id": validar_id(id_cliente)})
+    return convertId(result)
 
 def read_entregador(id_entregador):
-    result = entregadores.find_one({"_id": ObjectId(id_entregador)})
-    convertId(result)
-    return result
+    result = entregadores.find_one({"_id": validar_id(id_entregador)})
+    return convertId(result)
 
 def read_encomenda(id_encomenda):
-    result = encomendas.find_one({"_id": ObjectId(id_encomenda)})
-    convertId(result)
-    return result
+    result = encomendas.find_one({"_id": validar_id(id_encomenda)})
+    return convertId(result)
 
 def read_pedido(id_pedido):
-    result = pedidos.find_one({"_id": ObjectId(id_pedido)})
-    convertId(result)
-    return result
+    result = pedidos.find_one({"_id": validar_id(id_pedido)})
+    return convertId(result)
 
 
 
@@ -124,7 +125,7 @@ def update_cliente(id_cliente, nome=None, cpf=None, localizacao=None):
         update_fields["cpf"] = cpf
     if localizacao:
         update_fields["localizacao"] = localizacao
-    clientes.update_one({"_id": ObjectId(id_cliente)},{"$set": update_fields})
+    clientes.update_one({"_id": validar_id(id_cliente)},{"$set": update_fields})
 
 def update_entregador(id_entregador,nome=None, cpf=None, telefone=None):
     update_fields = {}
@@ -134,7 +135,7 @@ def update_entregador(id_entregador,nome=None, cpf=None, telefone=None):
         update_fields["cpf"] = cpf 
     if telefone:
         update_fields["telefone"] = telefone 
-    entregadores.update_one({"_id": ObjectId(id_entregador)},{"$set":update_fields})
+    entregadores.update_one({"_id": validar_id(id_entregador)},{"$set":update_fields})
 
 def update_encomenda(id_encomenda, nome=None, quantidade=None):
     update_fields = {}
@@ -142,7 +143,7 @@ def update_encomenda(id_encomenda, nome=None, quantidade=None):
         update_fields["nome"] = nome
     if quantidade:
         update_fields["quantidade"] = quantidade
-    encomendas.update_one({"_id":ObjectId(id_encomenda)},{"$set":update_fields})
+    encomendas.update_one({"_id":validar_id(id_encomenda)},{"$set":update_fields})
 
 def update_pedido(id_pedido, id_cliente=None, id_entregador=None, id_encomenda=None):
     update_fields = {}
@@ -152,19 +153,19 @@ def update_pedido(id_pedido, id_cliente=None, id_entregador=None, id_encomenda=N
         update_fields["id_entregador"] = id_entregador
     if id_encomenda:
         update_fields["id_encomenda"] = id_encomenda
-    pedidos.update_one({"_id":ObjectId(id_pedido)},{"$set":(update_fields)})
+    pedidos.update_one({"_id":validar_id(id_pedido)},{"$set":(update_fields)})
 
 
 ##CRUD - Delete - Atualizar um documento existente (por ID) 
 
 def drop_cliente(id_cliente):
-    clientes.delete_one({"_id": ObjectId(id_cliente)})
+    clientes.delete_one({"_id": validar_id(id_cliente)})
 
 def drop_entregador(id_entregador):
-    entregadores.delete_one({"_id": ObjectId(id_entregador)})
+    entregadores.delete_one({"_id": validar_id(id_entregador)})
 
 def drop_encomenda(id_encomenda):
-    encomendas.delete_one({"_id": ObjectId(id_encomenda)})
+    encomendas.delete_one({"_id": validar_id(id_encomenda)})
 
 def drop_pedido(id_pedido):
-    pedidos.delete_one({"_id": ObjectId(id_pedido)})
+    pedidos.delete_one({"_id": validar_id(id_pedido)})
