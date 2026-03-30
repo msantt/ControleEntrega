@@ -6,13 +6,13 @@ from repositories.crud import *
 router = APIRouter(prefix="/encomendas", tags=["Encomendas"])
 
 
-@router.post("/")
+@router.post("/",status_code=201)
 def createEncomenda(encomenda: EncomendaModel):
     return create_encomenda(encomenda.nome, encomenda.quantidade)
 
 @router.get("/")
-def readEncomendas():
-    return read_encomendas()
+def readEncomendas(skip:int = 0, limit: int = 10):
+    return read_encomendas(skip, limit)
 
 @router.get("/{id}")
 def readIdEncomenda(id: str):

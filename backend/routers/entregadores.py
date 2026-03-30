@@ -6,13 +6,13 @@ from repositories.crud import *
 router = APIRouter(prefix="/entregadores", tags=["Entregadores"])
 
 
-@router.post("/")
+@router.post("/",status_code=201)
 def createEntregador(entregador: EntregadorModel):
     return create_entregador(entregador.nome, entregador.cpf, entregador.telefone)
 
 @router.get("/")
-def readentregadores():
-    return read_entregadores()
+def readentregadores(skip:int = 0, limit: int = 10):
+    return read_entregadores(skip, limit)
 
 @router.get("/{id}")
 def readIdentregador(id: str):

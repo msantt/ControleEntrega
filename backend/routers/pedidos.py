@@ -7,10 +7,10 @@ router = APIRouter(prefix="/pedidos", tags=["Pedidos"])
 
 
 @router.get("/")
-def readPedidos():
-    return read_pedidos()
+def readPedidos(skip:int = 0, limit: int = 10):
+    return read_pedidos(skip, limit)
 
-@router.post("/")
+@router.post("/",status_code=201)
 def createPedido(pedido: PedidoModel):
     return create_pedido(pedido.id_cliente,pedido.id_entregador, pedido.id_encomenda, pedido.status)
 

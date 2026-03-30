@@ -59,29 +59,29 @@ def create_pedido(id_cliente, id_entregador, id_encomenda, status):
 
 ##CRUD - Read - Ler os documentos existentes (todos)
 
-def read_clientes():
-    resultado = list(clientes.find())
+def read_clientes(skip:int = 0, limit: int = 10):
+    resultado = list(clientes.find().skip(skip).limit(limit))
     for i in resultado:
         convertId(i)
     return resultado
 
 
-def read_entregadores():
-    resultado = list(entregadores.find())
+def read_entregadores(skip:int = 0, limit: int = 10):
+    resultado = list(entregadores.find().skip(skip).limit(limit))
     for i in resultado:
         convertId(i)
     return resultado
 
 
-def read_encomendas():
-    resultado = list(encomendas.find())
+def read_encomendas(skip:int = 0, limit: int = 10):
+    resultado = list(encomendas.find().skip(skip).limit(limit))
     for i in resultado:
         convertId(i)
     return resultado
 
 
-def read_pedidos():
-    resultado = list(pedidos.find())
+def read_pedidos(skip:int = 0, limit: int = 10):
+    resultado = list(pedidos.find().skip(skip).limit(limit))
     for i in resultado:
         convertId(i)
     return resultado

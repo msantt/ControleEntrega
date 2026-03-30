@@ -6,13 +6,13 @@ from repositories.crud import *
 router = APIRouter(prefix="/clientes", tags=["Clientes"])
 
 
-@router.post("/")
+@router.post("/", status_code=201)
 def createCliente(cliente: ClienteModel):
     return create_cliente(cliente.nome, cliente.cpf, cliente.localizacao)
 
 @router.get("/")
-def readClientes():
-    return read_clientes()
+def readClientes(skip:int = 0, limit: int = 10):
+    return read_clientes(skip, limit)
 
 @router.get("/{id}")
 def readIdCliente(id: str):
