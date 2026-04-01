@@ -1,22 +1,70 @@
-# Controle de Entregas
-Esse projeto particular, tem como finalidade criar um gerenciamento de entrega visando solucionar e reduzir rotas diferentes do ciclo dentro do processo e da logística. 
-Melhoria e redução de perdas de produtos,  garantir um serviço eficaz e cumprindo a entrega de responsabilidade de cada parte deste ciclo e tratando como um todo. Ajudando usuários e melhora da performance, eficiência de entrega da empresa: acabando com o acumulo de despesas por perdas de materiais, buscando a maior qualidade e experiência do vendedor para o seu cliente.
+# 📦 ControleEntrega
 
-# Sistema de gerenciamento de encomendas desenvolvido para portfólio. @msantt
+Sistema de gerenciamento de entregas desenvolvido para portfólio — focado em reduzir perdas, otimizar rotas e garantir rastreabilidade em todo o ciclo logístico.
 
-## O que o sistema faz
+> Desenvolvido por [@msantt](https://github.com/msantt)
+
+---
+
+## 💡 Sobre o projeto
+
+O ControleEntrega visa solucionar gargalos no processo logístico de empresas, reduzindo perdas de materiais, melhorando a performance de entrega e garantindo responsabilidade em cada etapa do ciclo — do cadastro à confirmação de entrega.
+
+---
+
+## ✅ O que o sistema faz
+
 - Cadastro de clientes, entregadores e encomendas
-- Rastreamento de pedidos
-- Confirmação de entrega com foto
+- Criação e rastreamento de pedidos
+- Busca por campo (nome, CPF, status, etc.)
+- Paginação de resultados
+- Validação de regras de negócio (cliente, entregador e encomenda devem existir para criar pedido)
+- Autenticação via JWT (rotas de escrita protegidas)
 
-## Tecnologias
-- Python
-- MongoDB
-- FastAPI (em breve)
-- HTML/CSS (em breve)
+---
 
-## Etapas
-▣ DATABASE: Tables and References;
-▣ API: Entities, (Process...);
-▣ FAST API: Create, Read, Put and Delete;
-▢ INTERFACE: (Process...);
+## 🛠 Tecnologias
+
+| Camada | Tecnologia |
+|--------|-----------|
+| Backend | Python + FastAPI |
+| Banco de dados | MongoDB |
+| Autenticação | JWT + Passlib (bcrypt) |
+| Frontend | HTML + CSS + JavaScript vanilla |
+
+---
+
+## 🏗 Arquitetura
+
+![Diagrama de Arquitetura](docs/ArchitectureModel.png.png)
+![Diagrama de Arquitetura](docs/ModeloDatabase.png.png)
+![Diagrama de Arquitetura](docs/FluxoPedido.png.png)
+```
+backend/
+├── app.py              # Entry point
+├── database.py         # Conexão MongoDB
+├── auth/               # JWT e autenticação
+├── models/             # Schemas Pydantic
+├── repositories/       # CRUD (acesso ao banco)
+├── routers/            # Rotas HTTP por entidade
+└── services/           # Regras de negócio
+
+frontend/
+├── index.html
+├── css/
+└── js/
+```
+
+---
+
+## 📌 Etapas
+
+- ✅ Modelagem do banco de dados
+- ✅ CRUD completo (Cliente, Entregador, Encomenda, Pedido)
+- ✅ API REST com FastAPI
+- ✅ Arquitetura em camadas
+- ✅ Validação de erros (400, 404)
+- ✅ Paginação e busca por campo
+- ✅ Autenticação JWT
+- ✅ Regras de negócio (services)
+- 🔄 Interface web (em andamento)
