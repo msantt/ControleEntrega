@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from routers import clientes, encomendas, entregadores, pedidos
+from auth import router as auth_router
 import logging
 import time
 
@@ -29,7 +30,7 @@ async def log_requests(request: Request, call_next):
     logger.info(f"{request.method}{request.url.path} | {response.status_code} | {duration}ms")
     return response
 
-
+app.include_router(auth_router.router)
 app.include_router(clientes.router)
 app.include_router(encomendas.router)
 app.include_router(entregadores.router)

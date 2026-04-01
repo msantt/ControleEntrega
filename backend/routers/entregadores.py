@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from models.schemas import EntregadorModel
 from repositories.crud import *
+from auth.auth import verificar_token
 
 
 router = APIRouter(prefix="/entregadores", tags=["Entregadores"])

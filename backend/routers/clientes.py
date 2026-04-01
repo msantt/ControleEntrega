@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from models.schemas import ClienteModel
 from repositories.crud import *
+from auth.auth import verificar_token
 
 
 router = APIRouter(prefix="/clientes", tags=["Clientes"])
