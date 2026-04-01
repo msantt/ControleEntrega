@@ -11,8 +11,8 @@ def createCliente(cliente: ClienteModel):
     return create_cliente(cliente.nome, cliente.cpf, cliente.localizacao)
 
 @router.get("/")
-def readClientes(skip:int = 0, limit: int = 10):
-    return read_clientes(skip, limit)
+def listar(skip: int = 0, limit: int = 10, nome: str = None,  cpf: str = None, localizacao: str = None):
+    return read_clientes(skip, limit, nome, cpf, localizacao)
 
 @router.get("/{id}")
 def readIdCliente(id: str):

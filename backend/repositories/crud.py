@@ -57,34 +57,59 @@ def create_pedido(id_cliente, id_entregador, id_encomenda, status):
     return str(resultado.inserted_id)
 
 
-##CRUD - Read - Ler os documentos existentes (todos)
+##CRUD - Read - Ler um documento específico (por qualquer parametro)
 
-def read_clientes(skip:int = 0, limit: int = 10):
-    resultado = list(clientes.find().skip(skip).limit(limit))
-    for i in resultado:
-        convertId(i)
+def read_clientes(skip: int = 0, limit: int = 10, nome: str = None,  cpf: str = None, localizacao: str = None):
+    filtro = {}
+    if nome:
+        filtro["nome"] = {"$regex": nome,"$options":"i"}
+    if cpf:
+        filtro["cpf"] = {"$regex": cpf,"$options":"i"}
+    if localizacao:
+        filtro["localizacao"] = {"$regex": localizacao,"$options":"i"}
+    resultado = list(clientes.find(filtro).skip(skip).limit(limit))
+    for i in resultado: convertId(i)
     return resultado
 
 
-def read_entregadores(skip:int = 0, limit: int = 10):
-    resultado = list(entregadores.find().skip(skip).limit(limit))
-    for i in resultado:
-        convertId(i)
+def read_entregadores(skip: int = 0, limit: int = 10, nome: str = None,  cpf: str = None, telefone: str = None):
+    filtro = {}
+    if nome:
+        filtro["nome"] = {"$regex": nome,"$options":"i"}
+    if cpf:
+        filtro["cpf"] = {"$regex": cpf,"$options":"i"}
+    if telefone:
+        filtro["telefone"] = {"$regex": telefone,"$options":"i"}
+    resultado = list(entregadores.find(filtro).skip(skip).limit(limit))
+    for i in resultado: convertId(i)
+    return resultado
+
+def read_encomendas(skip: int = 0, limit: int = 10, nome: str = None,  quantidade: int = None):
+    filtro = {}
+    if nome:
+        filtro["nome"] = {"$regex": nome,"$options":"i"}
+    if quantidade:
+        filtro["quantidade"] = quantidade
+    resultado = list(encomendas.find(filtro).skip(skip).limit(limit))
+    for i in resultado: convertId(i)
+    return resultado
+
+def read_pedidos(skip: int = 0, limit: int = 10, status: str = None,  id_cliente: str = None, id_entregador: str = None, id_encomenda: str = None):
+    filtro = {}
+    if status:
+        filtro["status"] = {"$regex": status,"$options":"i"}
+    if id_cliente:
+        filtro["id_cliente"] = id_cliente
+    if id_entregador:
+        filtro["id_entregador"] = id_entregador
+    if id_encomenda:
+        filtro["id_encomenda"] = id_encomenda
+    resultado = list(pedidos.find(filtro).skip(skip).limit(limit))
+    for i in resultado: convertId(i)
     return resultado
 
 
-def read_encomendas(skip:int = 0, limit: int = 10):
-    resultado = list(encomendas.find().skip(skip).limit(limit))
-    for i in resultado:
-        convertId(i)
-    return resultado
 
-
-def read_pedidos(skip:int = 0, limit: int = 10):
-    resultado = list(pedidos.find().skip(skip).limit(limit))
-    for i in resultado:
-        convertId(i)
-    return resultado
 
 
 ##CRUD - Read - Ler um documento específico (por ID)

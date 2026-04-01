@@ -11,8 +11,8 @@ def createEntregador(entregador: EntregadorModel):
     return create_entregador(entregador.nome, entregador.cpf, entregador.telefone)
 
 @router.get("/")
-def readentregadores(skip:int = 0, limit: int = 10):
-    return read_entregadores(skip, limit)
+def listar(skip: int = 0, limit: int = 10, nome: str = None,  cpf: str = None, telefone: str = None):
+    return read_entregadores(skip, limit, nome, cpf, telefone)
 
 @router.get("/{id}")
 def readIdentregador(id: str):

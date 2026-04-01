@@ -11,8 +11,8 @@ def createEncomenda(encomenda: EncomendaModel):
     return create_encomenda(encomenda.nome, encomenda.quantidade)
 
 @router.get("/")
-def readEncomendas(skip:int = 0, limit: int = 10):
-    return read_encomendas(skip, limit)
+def listar(skip: int = 0, limit: int = 10, nome: str = None,  quantidade: int = None):
+    return read_encomendas(skip, limit, nome, quantidade)
 
 @router.get("/{id}")
 def readIdEncomenda(id: str):
