@@ -36,9 +36,10 @@ O ControleEntrega visa solucionar gargalos no processo logístico de empresas, r
 
 ## 🏗 Arquitetura
 
-![Diagrama de Arquitetura](docs/ArchitectureModel.png.png)
-![Diagrama de Arquitetura](docs/ModeloDatabase.png.png)
-![Diagrama de Arquitetura](docs/FluxoPedido.png.png)
+![Diagrama de Arquitetura](docs/ArchitectureModel.png)
+![Diagrama de Arquitetura](docs/ModeloDatabase.png)
+![Diagrama de Arquitetura](docs/FluxoPedido.png)
+
 ```
 backend/
 ├── app.py              # Entry point
