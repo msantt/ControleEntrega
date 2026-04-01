@@ -37,8 +37,8 @@ O ControleEntrega visa solucionar gargalos no processo logístico de empresas, r
 ## 🏗 Arquitetura
 
 ![Diagrama de Arquitetura](docs/ArchitectureModel.png)
-![Diagrama de Arquitetura](docs/ModeloDatabase.png)
-![Diagrama de Arquitetura](docs/FluxoPedido.png)
+![Database](docs/ModeloDatabase.png)
+![Fluxo de funcionalidade](docs/FluxoPedido.png)
 
 ```
 backend/
