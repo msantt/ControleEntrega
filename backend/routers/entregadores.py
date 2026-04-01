@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from models.schemas import EntregadorModel
 from repositories.crud import *
 from auth.auth import verificar_token
@@ -8,7 +8,7 @@ router = APIRouter(prefix="/entregadores", tags=["Entregadores"])
 
 
 @router.post("/",status_code=201)
-def createEntregador(entregador: EntregadorModel):
+def createEntregador(entregador: EntregadorModel, usuario: str = Depends(verificar_token)):
     return create_entregador(entregador.nome, entregador.cpf, entregador.telefone)
 
 @router.get("/")
@@ -20,9 +20,9 @@ def readIdentregador(id: str):
     return read_entregador(id)
 
 @router.put("/{id}")
-def putEntregador(id : str, entregador: EntregadorModel):
+def putEntregador(id : str, entregador: EntregadorModel, usuario: str = Depends(verificar_token)):
     return update_entregador(id, entregador.nome, entregador.cpf, entregador.telefone)
 
 @router.delete("/{id}")
-def deleteEntregador(id: str):
+def deleteEntregador(id: str, usuario: str = Depends(verificar_token)):
     return drop_entregador(id)
