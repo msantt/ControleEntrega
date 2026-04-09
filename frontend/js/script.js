@@ -30,6 +30,18 @@ async function carregarDashboard() {
     } catch(e){
         console.error('Erro ao carregar dashboard:', e)
     }
+
+
 }
+
+async function carregarSecao(id, arquivo) {
+    const res = await fetch(arquivo)
+    const html = await res.text()
+    document.getElementById(id).innerHTML = html
+}
+
+carregarSecao('cadastros', 'pages/cadastros.html')
+carregarSecao('consulta', 'pages/consulta.html')
+carregarSecao('atualizar', 'pages/atualizar.html')
 
 carregarDashboard()
