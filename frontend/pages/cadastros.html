@@ -1,0 +1,48 @@
+<div class="container">
+    <h2>Cadastros</h2>
+    <h3>Cadastre clientes, entregadores, encomendas e pedidos</h3>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="cliente">Cliente</button>
+        <button class="tab" data-tab="entregador">Entregador</button>
+        <button class="tab" data-tab="encomenda">Encomenda</button>
+        <button class="tab" data-tab="pedido">Pedido</button>
+    </div>
+
+    <div class="tab-content" id="tab-cliente">
+        <input type="text" id="c-nome" placeholder="Nome">
+        <input type="text" id="c-cpf" placeholder="CPF">
+        <input type="text" id="c-localizacao" placeholder="Localização">
+        <button onclick="cadastrarCliente()">Cadastrar</button>
+        <p id="c-msg"></p>
+    </div>
+
+    <div class="tab-content hidden" id="tab-entregador">
+        <input type="text" id="e-nome" placeholder="Nome">
+        <input type="text" id="e-cpf" placeholder="CPF">
+        <input type="text" id="e-telefone" placeholder="telefone">
+        <button onclick="cadastrarEntregador()">Cadastrar</button>
+        <p id="e-msg"></p>
+    </div>
+
+    <div class="tab-content hidden" id="tab-encomenda">
+        <input type="text" id="en-nome" placeholder="Nome">
+        <input type="number" id="en-quantidade" placeholder="Quantidade">
+        <button onclick="cadastrarEncomenda()">Cadastrar</button>
+        <p id="en-msg"></p>
+    </div>
+
+    <div class="tab-content hidden" id="tab-pedido">
+        <input type="text" id="p-cliente" placeholder="ID do Cliente">
+        <input type="text" id="p-entregador" placeholder="ID do Entregador">
+        <input type="text" id="p-encomenda" placeholder="ID da Encomenda">
+        <select id="p-status">
+            <option value="Pendente">Pendente</option>
+            <option value="Em trânsito">Em trânsito</option>
+            <option value="Entregue">Entregue</option>
+            <option value="Cancelado">Cancelado</option>
+        </select>
+        <button onclick="cadastrarPedido()">Cadastrar</button>
+        <p id="p-msg"></p>
+    </div>
+</div>

@@ -40,8 +40,7 @@ async function carregarSecao(id, arquivo) {
     document.getElementById(id).innerHTML = html
 }
 
+carregarDashboard()
 carregarSecao('cadastros', 'pages/cadastros.html')
 carregarSecao('consulta', 'pages/consulta.html')
 carregarSecao('atualizar', 'pages/atualizar.html')
-
-carregarDashboard()
