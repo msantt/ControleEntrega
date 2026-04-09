@@ -54,7 +54,7 @@ async function cadastrarCliente() {
     }
     const res = await fetch(`${API}/clientes/`,{
         method: 'POST',
-        headers: {'Content-type': 'application/json', 'Authorrization': `Bearer ${getToken()}` },
+        headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
         body: JSON.stringify(body)
 
     })
@@ -71,7 +71,7 @@ async function cadastrarEntregador() {
     }
     const res = await fetch(`${API}/entregadores/`, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json',  'Authorrization': `Bearer ${getToken()}` },
+        headers: {'Content-Type': 'application/json',  'Authorization': `Bearer ${getToken()}` },
         body: JSON.stringify(body)
     })
     const msg = document.getElementById('e-msg')
@@ -79,9 +79,37 @@ async function cadastrarEntregador() {
     msg.style.color = res.ok ? 'green' : 'red'
 }
 
+async function cadastrarEncomenda(){
+    const body = {
+        nome: document.getElementById('en-nome').value,
+        quantidade: parseInt(document.getElementById('en-quantidade').value)
+    }
+    const res = await fetch(`${API}/encomendas/`,{
+        method: 'POST',
+        headers: {'Content-Type': 'application/json',   'Authorization': `Bearer ${getToken()}` },
+        body: JSON.stringify(body)
+    })
+    const msg = document.getElementById('en-msg')
+    msg.textContent = res.ok ? '✅ Encomenda cadastrada!' : '❌ Erro ao cadastrar'
+    msg.style.color = res.ok ? 'green' : 'red'
+}
 
-
-
+async function cadastrarPedido() {
+    const body = {
+        id_cliente: document.getElementById('p-cliente').value,
+        id_entregador: document.getElementById('p-entregador').value,
+        id_encomenda: document.getElementById('p-encomenda').value,
+        status: document.getElementById('p-status').value
+    }
+    const res = await fetch(`${API}/pedidos/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+        body: JSON.stringify(body)
+    })
+    const msg = document.getElementById('p-msg')
+    msg.textContent = res.ok ? '✅ Pedido cadastrado!' : '❌ Erro ao cadastrar'
+    msg.style.color = res.ok ? 'green' : 'red'
+}
 
 
 async function carregarSecao(id, arquivo) {

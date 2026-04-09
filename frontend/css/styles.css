@@ -152,3 +152,82 @@ section h2{
     font-size: 2em;
     margin-bottom: 0.4em;
 }
+
+/*-------TABS---------/*
+
+/* TABS */
+.tabs {
+    display: flex;
+    gap: 1em;
+    margin-top: 2em;
+    margin-bottom: 1.5em;
+}
+
+.tab {
+    padding: 10px 20px;
+    border: 2px solid var(--gray);
+    border-radius: 8px;
+    background: none;
+    font-family: var(--fonte);
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.tab:hover {
+    background-color: var(--laranja);
+    color: var(--white);
+    border-color: var(--laranja);
+}
+
+.tab.active {
+    background-color: var(--laranja);
+    color: var(--white);
+    border-color: var(--laranja);
+}
+
+/* FORMULÁRIOS */
+.tab-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    max-width: 500px;
+}
+
+.tab-content.hidden {
+    display: none;
+}
+
+.tab-content input,
+.tab-content select {
+    padding: 12px 16px;
+    border: 2px solid var(--gray);
+    border-radius: 8px;
+    font-family: var(--fonte);
+    font-size: 1em;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.tab-content input:focus,
+.tab-content select:focus {
+    border-color: var(--laranja);
+}
+
+.tab-content button {
+    padding: 12px;
+    background-color: var(--laranja);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-family: var(--fonte);
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.tab-content button:hover {
+    opacity: 0.85;
+}
