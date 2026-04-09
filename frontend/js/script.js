@@ -7,6 +7,10 @@ links.forEach(link => {
     });
 }); 
 
+function getToken(){
+    return localStorage.getItem('token')
+}
+
 async function carregarDashboard() {
     try{
         const[pedidos, clientes, entregadores, encomendas] = await Promise.all([
@@ -30,9 +34,55 @@ async function carregarDashboard() {
     } catch(e){
         console.error('Erro ao carregar dashboard:', e)
     }
-
-
 }
+
+document.addEventListener('click', e => {
+
+    if (e.target.classList.contains('tab')){
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'))
+        e.target.classList.add('active')
+        document.getElementById(`tab-${e.target.dataset.tab}`).classList.remove('hidden')
+    }
+})
+
+async function cadastrarCliente() {
+    const body = {
+        nome: document.getElementById('c-nome').value,
+        cpf: document.getElementById('c-cpf').value,
+        localizacao: document.getElementById('c-localizacao').value,
+    }
+    const res = await fetch(`${API}/clientes/`,{
+        method: 'POST',
+        headers: {'Content-type': 'application/json', 'Authorrization': `Bearer ${getToken()}` },
+        body: JSON.stringify(body)
+
+    })
+    const msg = document.getElementById('c-msg')
+    msg.textContent = res.ok ? '✅ Cliente cadastrado!' : '❌ Erro ao cadastrar'
+    msg.style.color = res.ok ? 'green' : 'red'    
+}
+
+async function cadastrarEntregador() {
+    const body = {
+        nome: document.getElementById('e-nome').value,
+        cpf: document.getElementById('e-cpf').value,
+        telefone: document.getElementById('e-telefone').value
+    }
+    const res = await fetch(`${API}/entregadores/`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json',  'Authorrization': `Bearer ${getToken()}` },
+        body: JSON.stringify(body)
+    })
+    const msg = document.getElementById('e-msg')
+    msg.textContent = res.ok ? '✅ Entregador cadastrado!' : '❌ Erro ao cadastrar'
+    msg.style.color = res.ok ? 'green' : 'red'
+}
+
+
+
+
+
 
 async function carregarSecao(id, arquivo) {
     const res = await fetch(arquivo)
