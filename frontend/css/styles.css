@@ -1,198 +1,239 @@
-:root{
-    --black: #000000;
-    --white: #ffffff;
-    --gray: #f3f3f3;
-    --graystrong:#6b6b6b;
-    --maybeblack:#141414;
-    --laranja: #ff7420;
+/* ==========================================================================
+   1. VARIÁVEIS (PALETA INTER CLEAN / ORANGE)
+   ========================================================================== */
+:root {
+    --bg-main: #ffffff;          /* Fundo principal branco puro */
+    --bg-card: #f8f9fa;          /* Fundo dos cards (cinza claro premium) */
+    --border-color: #e5e7eb;     /* Bordas sutis e limpas */
+    --text-main: #111827;        /* Texto principal (quase preto) */
+    --text-muted: #6b7280;       /* Texto secundário (cinza) */
+    
+    /* Cores de Destaque (Vibe Inter) */
+    --orange: #ff7a00;           /* Laranja Inter oficial */
+    --orange-glow: rgba(255, 122, 0, 0.1);
+    
+    /* Cores de Status para os Cards */
+    --color-total: #ff7a00;      /* Laranja */
+    --color-transit: #f59e0b;    /* Laranja escuro / Amber */
+    --color-success: #10b981;    /* Verde */
+    --color-error: #ef4444;      /* Vermelho */
+    
     --fonte: 'Roboto', sans-serif;
 }
 
-body{
-    background-color:rgb(255, 255, 255);
-    margin: auto;
+/* ==========================================================================
+   2. RESETS E CONFIGURAÇÕES GERAIS
+   ========================================================================== */
+body {
+    background-color: var(--bg-main);
+    margin: 0;
     font-family: var(--fonte);
     font-weight: 500;
+    color: var(--text-main);
+    -webkit-font-smoothing: antialiased;
 }
 
-.container{
+.container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
-    display: grid;
+}
+
+section h2 {
+    padding-top: 2em;
+    font-size: 1.8em;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+}
+
+section h3 {
+    font-size: 0.95em;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-top: 0.4em;
+}
+
+/* ==========================================================================
+   3. HEADER E NAVEGAÇÃO
+   ========================================================================== */
+.header {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+}
+
+.header .container {
+    display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 80px;
 }
 
-.header {
-    background-color: var(--white);
-    font-family: var(--fonte);
-    font-weight: 900;
-    border-bottom: 5px solid var(--gray);
+.header a img {
+    height: 40px;
+    width: auto; /* Mantém a logo original sem filtros */
 }
 
-.header a img{
-    width: auto;
-    padding-top: 2em;
-    padding-bottom: 1em;
-}
-
-.header nav ul{
+.header nav ul {
     margin: 0;
     padding: 0;
-    gap: 2em;
+    gap: 1.5em;
     display: flex;
-    padding-bottom: 20px;
 }
 
-
-.header nav ul li{
+.header nav ul li {
     list-style: none;
 }
 
-.header div nav ul li a{
+.header div nav ul li a {
     font-weight: 600;
-    font-size: 1.3em;
+    font-size: 1em;
     text-decoration: none;
-    color: var(--black);
-    padding: 10px 12px;
-    border-radius: 8px;
-    transition: background-color 0.5s, color 0s;
+    color: var(--text-muted);
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: background-color 0.2s, color 0.2s;
 }
 
-.header div nav ul li a:hover{
-    background-color:#ff7420;
-    color: #f3f3f3;
+/* Hover e Estado Ativo com Laranja Inter */
+.header div nav ul li a:hover,
+.header div nav ul li a.active {
+    background-color: var(--orange-glow);
+    color: var(--orange);
 }
 
-.header div nav ul li a.active{
-    background-color:#ff7420;
-    color: #f3f3f3;
-
-}
-
-section h2{
-    padding-top: 2em;
-}
-
-/* section{
-    width: 100%;
-} /*
-
-
-/* CARDS */
-
-.cards{
-
-    display: flex;
+/* ==========================================================================
+   4. CARDS (GRID PREMIUM)
+   ========================================================================== */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.5em;
     margin-top: 2em;
     padding: 0;
 }
 
-.card{
-    background: var(--white);
-    border: 2px solid var(--gray);
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
-    padding: 0.5em;
-
-    min-width: 260px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-
-    align-content: center;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    padding: 1.5em;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
-.card-icon{
-    font-size: 2em;
-    background-color: #f3f3f3;
-    width: 50px;
-    height: 50px;
-    border-radius: 20%;
+.card:hover {
+    transform: translateY(-4px);
+    border-color: var(--orange);
+    box-shadow: 0 12px 20px -10px var(--orange-glow);
+}
+
+.card-icon {
+    font-size: 1.2em;
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0.4em;
+    margin-bottom: 1em;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
 
-.card-icon i {
-    font-size: 1.2em;
-    line-height: 1;
+.card-label {
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 0.5em;
 }
 
+.card-value {
+    font-size: 2.2em;
+    font-weight: 700;
+}
+
+/* Vinculando as cores aos ícones e valores */
 .card:nth-child(1) {
-    .card-icon i{color:#ff7420}
-    .card-value{color:#ff7420}
+    &:hover { border-color: var(--color-total); }
+    .card-icon i, .card-value { color: var(--color-total); }
 }
 
 .card:nth-child(2) {
-    .card-icon i{color:orange}
-    .card-value{color:orange}
+    &:hover { border-color: var(--color-transit); }
+    .card-icon i, .card-value { color: var(--color-transit); }
 }
 
 .card:nth-child(3) {
-    .card-icon i{color:green}
-    .card-value{color:green}
+    &:hover { border-color: var(--color-success); }
+    .card-icon i, .card-value { color: var(--color-success); }
 }
+
 .card:nth-child(4) {
-    .card-icon i{color:red}
-    .card-value{color:red}
+    &:hover { border-color: var(--color-error); }
+    .card-icon i, .card-value { color: var(--color-error); }
 }
 
-.card-label{
-    font-size: 1.4em;
-    padding: 0.8em;
-}
-
-.card-value{
-    font-size: 2em;
-    margin-bottom: 0.4em;
-}
-
-/*-------TABS---------/*
-
-/* TABS */
+/* ==========================================================================
+   5. TABS (ABAS DE NAVEGAÇÃO INTERNAS)
+   ========================================================================== */
 .tabs {
     display: flex;
-    gap: 1em;
-    margin-top: 2em;
-    margin-bottom: 1.5em;
+    gap: 0.3em;
+    margin: 2em auto 1.5em auto; /* Alterado: adicionado 'auto' na esquerda e direita */
+    background-color: var(--bg-card);
+    padding: 6px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    width: max-content;
 }
 
 .tab {
-    padding: 10px 20px;
-    border: 2px solid var(--gray);
-    border-radius: 8px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
     background: none;
+    color: var(--text-muted);
     font-family: var(--fonte);
-    font-size: 1em;
+    font-size: 0.95em;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+    transition: all 0.2s ease;
 }
 
 .tab:hover {
-    background-color: var(--laranja);
-    color: var(--white);
-    border-color: var(--laranja);
+    color: var(--text-main);
+    background-color: rgba(0, 0, 0, 0.03);
 }
 
 .tab.active {
-    background-color: var(--laranja);
-    color: var(--white);
-    border-color: var(--laranja);
+    background-color: var(--orange);
+    color: #ffffff;
 }
 
-/* FORMULÁRIOS */
+/* ==========================================================================
+   6. FORMULÁRIOS
+   ========================================================================== */
 .tab-content {
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 1.2em;
     max-width: 500px;
+    background-color: var(--bg-card);
+    padding: 2.5em;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    
+    margin: 0 auto 3em auto; /* Adicione esta linha (cima, direita, baixo, esquerda) */
 }
 
 .tab-content.hidden {
@@ -202,32 +243,112 @@ section h2{
 .tab-content input,
 .tab-content select {
     padding: 12px 16px;
-    border: 2px solid var(--gray);
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     font-family: var(--fonte);
     font-size: 1em;
+    color: var(--text-main);
     outline: none;
-    transition: border-color 0.3s;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .tab-content input:focus,
 .tab-content select:focus {
-    border-color: var(--laranja);
+    border-color: var(--orange);
+    box-shadow: 0 0 0 3px var(--orange-glow);
+}
+
+.tab-content input::placeholder {
+    color: #9ca3af;
 }
 
 .tab-content button {
-    padding: 12px;
-    background-color: var(--laranja);
-    color: var(--white);
+    padding: 14px;
+    background-color: var(--orange);
+    color: #ffffff;
     border: none;
     border-radius: 8px;
     font-family: var(--fonte);
     font-size: 1em;
     font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.3s;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-top: 0.5em;
+    box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2);
 }
 
 .tab-content button:hover {
-    opacity: 0.85;
+    background-color: #e06c00; /* Laranja um pouco mais denso no hover */
+}
+
+.tab-content button:active {
+    transform: scale(0.98);
+}
+
+section h2, section h3 {
+    text-align: center; /* Joga os textos pro meio da página */
+}
+
+/* ==========================================================================
+   7. ANIMAÇÃO DAS ABAS (FADE IN + SLIDE UP)
+   ========================================================================== */
+
+/* 1. Criamos a rota da animação: começa invisível e um pouco abaixo, termina visível no lugar certo */
+@keyframes surgirSuave {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 2. Aplicamos a animação APENAS na aba que está visível (ou seja, que NÃO tem a classe .hidden) */
+.tab-content:not(.hidden) {
+    animation: surgirSuave 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ==========================================================================
+   8. TRANSIÇÃO ENTRE SEÇÕES (SLIDE UP & OUT)
+   ========================================================================== */
+
+/* Animação 1: Quem tá na tela vai subir um pouco e sumir */
+@keyframes sumirParaCima {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+}
+
+/* Animação 2: Quem tá entrando vai vir bem de baixo e se estabilizar */
+@keyframes surgirDoInferior {
+    from {
+        opacity: 0;
+        transform: translateY(100px); /* Começa bem abaixo na tela */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Classes que o JS vai injetar para disparar os efeitos */
+.secao-saindo {
+    animation: sumirParaCima 0.3s ease-in forwards;
+}
+
+.secao-entrando {
+    animation: surgirDoInferior 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Forçar o sumiço completo após a animação */
+.hidden-secao {
+    display: none !important;
 }
