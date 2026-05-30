@@ -473,3 +473,25 @@ section.hidden-secao {
     letter-spacing: 0.03em;
     text-align: center;
 }
+
+.data-table td:last-child {
+    display: flex;
+    gap: 0.5em;
+    justify-content: center;
+    align-items: center;
+}
+
+.data-table button {
+    padding: 6px 10px;
+    background-color: var(--orange);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85em;
+    transition: opacity 0.2s;
+}
+
+.data-table button:hover {
+    opacity: 0.8;
+}

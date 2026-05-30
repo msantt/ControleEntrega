@@ -1,6 +1,90 @@
 <div class="container">
-<h2>Atualizar</h2>
-<button class="tab" onclick="alternarSecaoComTransicao('cadastros', 'atualizar')" style="background: none; color: var(--orange); border: none; cursor: pointer; text-decoration: underline; margin-top: 20px;">
-    Precisa atualizar um registro? Clique aqui
-</button>
+    <h2>Atualizar</h2>
+    <h3>Busque, edite ou remova registros do sistema</h3>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="u-cliente">Cliente</button>
+        <button class="tab" data-tab="u-entregador">Entregador</button>
+        <button class="tab" data-tab="u-encomenda">Encomenda</button>
+        <button class="tab" data-tab="u-pedido">Pedido</button>
+    </div>
+
+    <!-- CLIENTE -->
+    <div class="tab-content" id="tab-u-cliente">
+        <input type="text" id="busca-c-nome" placeholder="Buscar cliente por nome...">
+        <button onclick="buscarCliente()">🔍 Buscar</button>
+        <div id="resultado-cliente" style="display:none; margin-top:1em;">
+            <input type="hidden" id="u-c-id">
+            <input type="text" id="u-c-nome" placeholder="Nome">
+            <input type="text" id="u-c-cpf" placeholder="CPF">
+            <input type="text" id="u-c-localizacao" placeholder="Localização">
+            <div style="display:flex; gap:0.8em;">
+                <button onclick="atualizarCliente()">✏️ Atualizar</button>
+                <button onclick="deletarCliente()" style="background-color:#ef4444;">🗑️ Deletar</button>
+            </div>
+        </div>
+        <p id="u-c-msg"></p>
+    </div>
+
+    <!-- ENTREGADOR -->
+    <div class="tab-content hidden" id="tab-u-entregador">
+        <input type="text" id="busca-e-nome" placeholder="Buscar entregador por nome...">
+        <button onclick="buscarEntregador()">🔍 Buscar</button>
+        <div id="resultado-entregador" style="display:none; margin-top:1em;">
+            <input type="hidden" id="u-e-id">
+            <input type="text" id="u-e-nome" placeholder="Nome">
+            <input type="text" id="u-e-cpf" placeholder="CPF">
+            <input type="text" id="u-e-telefone" placeholder="Telefone">
+            <div style="display:flex; gap:0.8em;">
+                <button onclick="atualizarEntregador()">✏️ Atualizar</button>
+                <button onclick="deletarEntregador()" style="background-color:#ef4444;">🗑️ Deletar</button>
+            </div>
+        </div>
+        <p id="u-e-msg"></p>
+    </div>
+
+    <!-- ENCOMENDA -->
+    <div class="tab-content hidden" id="tab-u-encomenda">
+        <input type="text" id="busca-en-nome" placeholder="Buscar encomenda por nome...">
+        <button onclick="buscarEncomenda()">🔍 Buscar</button>
+        <div id="resultado-encomenda" style="display:none; margin-top:1em;">
+            <input type="hidden" id="u-en-id">
+            <input type="text" id="u-en-nome" placeholder="Nome">
+            <input type="number" id="u-en-quantidade" placeholder="Quantidade">
+            <div style="display:flex; gap:0.8em;">
+                <button onclick="atualizarEncomenda()">✏️ Atualizar</button>
+                <button onclick="deletarEncomenda()" style="background-color:#ef4444;">🗑️ Deletar</button>
+            </div>
+        </div>
+        <p id="u-en-msg"></p>
+    </div>
+
+    <!-- PEDIDO -->
+    <div class="tab-content hidden" id="tab-u-pedido">
+        <select id="busca-p-status">
+            <option value="">Buscar por status...</option>
+            <option value="Pendente">Pendente</option>
+            <option value="Em trânsito">Em trânsito</option>
+            <option value="Entregue">Entregue</option>
+            <option value="Cancelado">Cancelado</option>
+        </select>
+        <button onclick="buscarPedido()">🔍 Buscar</button>
+        <div id="resultado-pedido" style="display:none; margin-top:1em;">
+            <input type="hidden" id="u-p-id">
+            <input type="text" id="u-p-cliente" placeholder="ID do Cliente">
+            <input type="text" id="u-p-entregador" placeholder="ID do Entregador">
+            <input type="text" id="u-p-encomenda" placeholder="ID da Encomenda">
+            <select id="u-p-status">
+                <option value="Pendente">Pendente</option>
+                <option value="Em trânsito">Em trânsito</option>
+                <option value="Entregue">Entregue</option>
+                <option value="Cancelado">Cancelado</option>
+            </select>
+            <div style="display:flex; gap:0.8em;">
+                <button onclick="atualizarPedido()">✏️ Atualizar</button>
+                <button onclick="deletarPedido()" style="background-color:#ef4444;">🗑️ Deletar</button>
+            </div>
+        </div>
+        <p id="u-p-msg"></p>
+    </div>
 </div>

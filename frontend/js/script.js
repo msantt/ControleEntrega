@@ -301,9 +301,6 @@ carregarSecao('cadastros', 'pages/cadastros.html');
 carregarSecao('consulta', 'pages/consulta.html');
 carregarSecao('atualizar', 'pages/atualizar.html');
 
-
-_____________________________________________________
-
 /* ==========================================================================
    5.1. REQUISIÇÕES DE CONSULTA (READ)
    ========================================================================== */
@@ -501,4 +498,195 @@ async function carregarSecao(id, arquivo) {
     } catch (error) {
         console.error(`Erro ao carregar a seção ${id}:`, error)
     }
+}
+
+// ── ATUALIZAR ────────────────────────────────────────
+async function atualizarCliente() {
+    const id = document.getElementById('u-c-id').value
+    const body = {
+        nome: document.getElementById('u-c-nome').value,
+        cpf: document.getElementById('u-c-cpf').value,
+        localizacao: document.getElementById('u-c-localizacao').value
+    }
+    const res = await fetch(`${API}/clientes/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+        body: JSON.stringify(body)
+    })
+    const msg = document.getElementById('u-c-msg')
+    msg.textContent = res.ok ? '✅ Cliente atualizado!' : '❌ Erro ao atualizar'
+    msg.style.color = res.ok ? 'green' : 'red'
+}
+
+async function deletarCliente(id) {
+    const idFinal = id || document.getElementById('u-c-id').value
+    if (!confirm('Tem certeza que deseja deletar?')) return
+    const res = await fetch(`${API}/clientes/${idFinal}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+    const msg = document.getElementById('u-c-msg')
+    msg.textContent = res.ok ? '✅ Cliente deletado!' : '❌ Erro ao deletar'
+    msg.style.color = res.ok ? 'green' : 'red'
+    if (res.ok) listarClientes()
+}
+
+async function atualizarEntregador() {
+    const id = document.getElementById('u-e-id').value
+    const body = {
+        nome: document.getElementById('u-e-nome').value,
+        cpf: document.getElementById('u-e-cpf').value,
+        telefone: document.getElementById('u-e-telefone').value
+    }
+    const res = await fetch(`${API}/entregadores/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+        body: JSON.stringify(body)
+    })
+    const msg = document.getElementById('u-e-msg')
+    msg.textContent = res.ok ? '✅ Entregador atualizado!' : '❌ Erro ao atualizar'
+    msg.style.color = res.ok ? 'green' : 'red'
+}
+
+async function deletarEntregador(id) {
+    const idFinal = id || document.getElementById('u-e-id').value
+    if (!confirm('Tem certeza que deseja deletar?')) return
+    const res = await fetch(`${API}/entregadores/${idFinal}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+    const msg = document.getElementById('u-e-msg')
+    msg.textContent = res.ok ? '✅ Entregador deletado!' : '❌ Erro ao deletar'
+    msg.style.color = res.ok ? 'green' : 'red'
+    if (res.ok) listarEntregadores()
+}
+
+async function atualizarEncomenda() {
+    const id = document.getElementById('u-en-id').value
+    const body = {
+        nome: document.getElementById('u-en-nome').value,
+        quantidade: parseInt(document.getElementById('u-en-quantidade').value)
+    }
+    const res = await fetch(`${API}/encomendas/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+        body: JSON.stringify(body)
+    })
+    const msg = document.getElementById('u-en-msg')
+    msg.textContent = res.ok ? '✅ Encomenda atualizada!' : '❌ Erro ao atualizar'
+    msg.style.color = res.ok ? 'green' : 'red'
+}
+
+async function deletarEncomenda(id) {
+    const idFinal = id || document.getElementById('u-en-id').value
+    if (!confirm('Tem certeza que deseja deletar?')) return
+    const res = await fetch(`${API}/encomendas/${idFinal}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+    const msg = document.getElementById('u-en-msg')
+    msg.textContent = res.ok ? '✅ Encomenda deletada!' : '❌ Erro ao deletar'
+    msg.style.color = res.ok ? 'green' : 'red'
+    if (res.ok) listarEncomendas()
+}
+
+async function atualizarPedido() {
+    const id = document.getElementById('u-p-id').value
+    const body = {
+        id_cliente: document.getElementById('u-p-cliente').value,
+        id_entregador: document.getElementById('u-p-entregador').value,
+        id_encomenda: document.getElementById('u-p-encomenda').value,
+        status: document.getElementById('u-p-status').value
+    }
+    const res = await fetch(`${API}/pedidos/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+        body: JSON.stringify(body)
+    })
+    const msg = document.getElementById('u-p-msg')
+    msg.textContent = res.ok ? '✅ Pedido atualizado!' : '❌ Erro ao atualizar'
+    msg.style.color = res.ok ? 'green' : 'red'
+    if (res.ok) carregarDashboard()
+}
+
+async function deletarPedido(id) {
+    const idFinal = id || document.getElementById('u-p-id').value
+    if (!confirm('Tem certeza que deseja deletar?')) return
+    const res = await fetch(`${API}/pedidos/${idFinal}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+    const msg = document.getElementById('u-p-msg')
+    msg.textContent = res.ok ? '✅ Pedido deletado!' : '❌ Erro ao deletar'
+    msg.style.color = res.ok ? 'green' : 'red'
+    if (res.ok) carregarDashboard()
+}
+
+// ── BUSCA PARA ATUALIZAR ─────────────────────────────
+async function buscarCliente() {
+    const nome = document.getElementById('busca-c-nome').value
+    const res = await fetch(`${API}/clientes/?nome=${nome}`, {
+        headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+    const data = await res.json()
+    if (!data.length) return alert('Nenhum cliente encontrado!')
+    const c = data[0]
+    document.getElementById('u-c-id').value = c._id
+    document.getElementById('u-c-nome').value = c.nome
+    document.getElementById('u-c-cpf').value = c.cpf
+    document.getElementById('u-c-localizacao').value = c.localizacao
+    document.getElementById('resultado-cliente').style.display = 'flex'
+    document.getElementById('resultado-cliente').style.flexDirection = 'column'
+    document.getElementById('resultado-cliente').style.gap = '1em'
+}
+
+async function buscarEntregador() {
+    const nome = document.getElementById('busca-e-nome').value
+    const res = await fetch(`${API}/entregadores/?nome=${nome}`, {
+        headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+    const data = await res.json()
+    if (!data.length) return alert('Nenhum entregador encontrado!')
+    const e = data[0]
+    document.getElementById('u-e-id').value = e._id
+    document.getElementById('u-e-nome').value = e.nome
+    document.getElementById('u-e-cpf').value = e.cpf
+    document.getElementById('u-e-telefone').value = e.telefone
+    document.getElementById('resultado-entregador').style.display = 'flex'
+    document.getElementById('resultado-entregador').style.flexDirection = 'column'
+    document.getElementById('resultado-entregador').style.gap = '1em'
+}
+
+async function buscarEncomenda() {
+    const nome = document.getElementById('busca-en-nome').value
+    const res = await fetch(`${API}/encomendas/?nome=${nome}`, {
+        headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+    const data = await res.json()
+    if (!data.length) return alert('Nenhuma encomenda encontrada!')
+    const en = data[0]
+    document.getElementById('u-en-id').value = en._id
+    document.getElementById('u-en-nome').value = en.nome
+    document.getElementById('u-en-quantidade').value = en.quantidade
+    document.getElementById('resultado-encomenda').style.display = 'flex'
+    document.getElementById('resultado-encomenda').style.flexDirection = 'column'
+    document.getElementById('resultado-encomenda').style.gap = '1em'
+}
+
+async function buscarPedido() {
+    const status = document.getElementById('busca-p-status').value
+    const res = await fetch(`${API}/pedidos/?status=${status}`, {
+        headers: { 'Authorization': `Bearer ${getToken()}` }
+    })
+    const data = await res.json()
+    if (!data.length) return alert('Nenhum pedido encontrado!')
+    const p = data[0]
+    document.getElementById('u-p-id').value = p._id
+    document.getElementById('u-p-cliente').value = p.id_cliente
+    document.getElementById('u-p-entregador').value = p.id_entregador
+    document.getElementById('u-p-encomenda').value = p.id_encomenda
+    document.getElementById('u-p-status').value = p.status
+    document.getElementById('resultado-pedido').style.display = 'flex'
+    document.getElementById('resultado-pedido').style.flexDirection = 'column'
+    document.getElementById('resultado-pedido').style.gap = '1em'
 }
