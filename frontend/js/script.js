@@ -1,13 +1,39 @@
 const API = 'http://127.0.0.1:8000';
 
 /* ==========================================================================
-   1. CONTROLE DE ATIVAÇÃO DO MENU SUPERIOR (HEADER)
+   1. CONTROLE DE ATIVAÇÃO DO MENU SUPERIOR (HEADER & SEÇÕES PRINCIPAIS)
    ========================================================================== */
 const links = document.querySelectorAll('.header div nav ul li a');
+
 links.forEach(link => {
-    link.addEventListener('click', () => {
-        links.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
+    link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        
+        // Se for um link de ancoragem interna (ID)
+        if (href.startsWith('#')) {
+            e.preventDefault(); // Evita o pulo brusco padrão do HTML
+            
+            // Encontra a seção atual que está visível na tela (ignora o dashboard fixo)
+            const secaoAtual = document.querySelector('section:not(.hidden-secao):not(.dashboard)');
+            const idDestino = href.replace('#', '');
+
+            // Se clicou no Dashboard, apenas lida com o scroll ou exibição dele
+            if (idDestino === 'dashboard') {
+                links.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+            
+            // Se houver uma seção ativa e ela for diferente do destino, alterna com transição
+            if (secaoAtual && secaoAtual.id !== idDestino) {
+                // Atualiza o active no menu superior
+                links.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                alternarSecaoComTransicao(secaoAtual.id, idDestino);
+            }
+        }
     });
 }); 
 
@@ -23,7 +49,6 @@ function getToken() {
    ========================================================================== */
 async function carregarDashboard() {
     try {
-        // Buscando apenas os pedidos, já que os outros dados não populam os cards atuais
         const res = await fetch(`${API}/pedidos/?limit=1000`, {
             headers: { 'Authorization': `Bearer ${getToken()}` }
         });
@@ -34,7 +59,6 @@ async function carregarDashboard() {
         const total = pedidos.length;
         const emTransito = pedidos.filter(p => p.status === 'Em trânsito').length;
         const entregues = pedidos.filter(p => p.status === 'Entregue').length;
-        // Ajuste o 'Atrasado' aqui para bater com o padrão String do seu backend
         const atrasados = pedidos.filter(p => p.status === 'Atrasado').length; 
 
         const cardValues = document.querySelectorAll('.card-value');
@@ -51,15 +75,27 @@ async function carregarDashboard() {
 }
 
 /* ==========================================================================
-   4. SISTEMA DE ABAS VIA DELEGAÇÃO DE EVENTOS
+   4. SISTEMA DE ABAS INTERNAS (ISOLADO POR SEÇÃO)
    ========================================================================== */
 document.addEventListener('click', e => {
-    if (e.target.classList.contains('tab')) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+    // Verifica se o elemento clicado é uma aba (.tab) e possui o atributo data-tab
+    if (e.target.classList.contains('tab') && e.target.dataset.tab) {
         
+        // Encontra a seção pai ou container onde essa aba específica está inserida
+        const secaoPai = e.target.closest('section') || e.target.closest('.container');
+        if (!secaoPai) return;
+
+        // 1. Remove 'active' APENAS das abas que pertencem a este bloco/container
+        secaoPai.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        
+        // 2. Esconde (.hidden) APENAS os conteúdos que pertencem a este bloco/container
+        secaoPai.querySelectorAll('.tab-content').forEach(tc => tc.classList.add('hidden'));
+        
+        // 3. Ativa a aba atual
         e.target.classList.add('active');
-        const targetContent = document.getElementById(`tab-${e.target.dataset.tab}`);
+        
+        // 4. Mostra o conteúdo correspondente dentro deste escopo (ex: tab-cliente)
+        const targetContent = secaoPai.querySelector(`#tab-${e.target.dataset.tab}`);
         if (targetContent) {
             targetContent.classList.remove('hidden');
         }
@@ -70,7 +106,7 @@ document.addEventListener('click', e => {
    5. REQUISIÇÕES DE CADASTRO (CRUD)
    ========================================================================== */
 
-// CLIESTE
+// CLIENTE
 async function cadastrarCliente() {
     const inputNome = document.getElementById('c-nome');
     const inputCpf = document.getElementById('c-cpf');
@@ -95,7 +131,6 @@ async function cadastrarCliente() {
     if (res.ok) {
         msg.textContent = '✅ Cliente cadastrado!';
         msg.style.color = 'green';
-        // Limpa os campos após o sucesso
         inputNome.value = '';
         inputCpf.value = '';
         inputLocalizacao.value = '';
@@ -177,7 +212,6 @@ async function cadastrarPedido() {
     const inputEncomenda = document.getElementById('p-encomenda');
     const selectStatus = document.getElementById('p-status');
 
-    // DICA: valide se o seu modelo Pydantic espera "id_cliente" ou "cliente_id"
     const body = {
         id_cliente: inputCliente.value,
         id_entregador: inputEntregador.value,
@@ -202,7 +236,7 @@ async function cadastrarPedido() {
         inputEntregador.value = '';
         inputEncomenda.value = '';
         selectStatus.value = 'Pendente';
-        carregarDashboard(); // Atualiza os números no topo na hora!
+        carregarDashboard(); 
     } else {
         msg.textContent = '❌ Erro ao cadastrar';
         msg.style.color = 'red';
@@ -210,13 +244,18 @@ async function cadastrarPedido() {
 }
 
 /* ==========================================================================
-   6. INICIALIZAÇÃO DA PÁGINA
+   6. INICIALIZAÇÃO E TRANSIÇÃO DE PÁGINAS
    ========================================================================== */
 async function carregarSecao(id, arquivo) {
     try {
         const res = await fetch(arquivo);
         const html = await res.text();
         document.getElementById(id).innerHTML = html;
+        
+        // Começa as seções secundárias escondidas por padrão
+        if (id !== 'cadastros') {
+            document.getElementById(id).classList.add('hidden-secao');
+        }
     } catch (error) {
         console.error(`Erro ao carregar a seção ${id}:`, error);
     }
@@ -228,20 +267,27 @@ function alternarSecaoComTransicao(idSecaoAtual, idSecaoDestino) {
 
     if (!secaoAtual || !secaoDestino) return;
 
+    // Sincroniza o link do menu superior caso a mudança venha de um botão interno
+    links.forEach(l => {
+        if (l.getAttribute('href') === `#${idSecaoDestino}`) {
+            links.forEach(link => link.classList.remove('active'));
+            l.classList.add('active');
+        }
+    });
+
     // 1. Aplica a animação de saída na seção atual
     secaoAtual.classList.add('secao-saindo');
 
-    // 2. Aguarda a animação de saída terminar (300ms do CSS)
+    // 2. Aguarda os 300ms da animação de saída terminar
     setTimeout(() => {
-        // Esconde de fato a seção antiga e limpa a classe de animação dela
         secaoAtual.classList.add('hidden-secao');
         secaoAtual.classList.remove('secao-saindo');
 
-        // Mostra a nova seção e aplica a animação vindo do inferior
+        // Mostra a nova seção e dispara a animação vinda de baixo
         secaoDestino.classList.remove('hidden-secao');
         secaoDestino.classList.add('secao-entrando');
 
-        // Remove a classe de entrada depois que ela finalizar para não quebrar futuros cliques
+        // Limpa a classe de animação após finalizar os 400ms
         setTimeout(() => {
             secaoDestino.classList.remove('secao-entrando');
         }, 400);
@@ -249,11 +295,205 @@ function alternarSecaoComTransicao(idSecaoAtual, idSecaoDestino) {
     }, 300); 
 }
 
-
-
-// Inicializa o app
+// Inicializa o sistema
 carregarDashboard();
 carregarSecao('cadastros', 'pages/cadastros.html');
 carregarSecao('consulta', 'pages/consulta.html');
 carregarSecao('atualizar', 'pages/atualizar.html');
 
+
+_____________________________________________________
+
+/* ==========================================================================
+   5.1. REQUISIÇÕES DE CONSULTA (READ)
+   ========================================================================== */
+
+// LISTAR CLIENTES
+async function listarClientes() {
+    try {
+        const res = await fetch(`${API}/clientes/`, {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        const clientes = await res.json();
+        const tbody = document.getElementById('tabela-clientes-dados');
+        
+        if (!tbody) return;
+        tbody.innerHTML = ''; // Limpa a linha de exemplo
+
+        if (!Array.isArray(clientes) || clientes.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Nenhum cliente encontrado.</td></tr>`;
+            return;
+        }
+
+        clientes.forEach(c => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${c.nome || 'Sem nome'}</td>
+                <td>${c.cpf || '-'}</td>
+                <td>${c.localizacao || '-'}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (e) {
+        console.error('Erro ao buscar clientes:', e);
+    }
+}
+
+// LISTAR ENTREGADORES
+async function listarEntregadores() {
+    try {
+        const res = await fetch(`${API}/entregadores/`, {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        const entregadores = await res.json();
+        const tbody = document.getElementById('tabela-entregadores-dados');
+        
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        if (!Array.isArray(entregadores) || entregadores.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Nenhum entregador encontrado.</td></tr>`;
+            return;
+        }
+
+        entregadores.forEach(e => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${e.nome}</td>
+                <td>${e.cpf || '-'}</td>
+                <td>${e.telefone || '-'}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (err) {
+        console.error('Erro ao buscar entregadores:', err);
+    }
+}
+
+// LISTAR ENCOMENDAS
+async function listarEncomendas() {
+    try {
+        const res = await fetch(`${API}/encomendas/`, {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        const encomendas = await res.json();
+        const tbody = document.getElementById('tabela-encomendas-dados');
+        
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        if (!Array.isArray(encomendas) || encomendas.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Nenhuma encomenda encontrada.</td></tr>`;
+            return;
+        }
+
+        encomendas.forEach(en => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>#${en.id || en.id_encomenda}</td>
+                <td>${en.nome}</td>
+                <td>${en.quantidade}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (err) {
+        console.error('Erro ao buscar encomendas:', err);
+    }
+}
+
+// LISTAR PEDIDOS
+async function listarPedidos() {
+    try {
+        const res = await fetch(`${API}/pedidos/?limit=1000`, {
+            headers: { 'Authorization': `Bearer ${getToken()}` }
+        });
+        const pedidos = await res.json();
+        const tbody = document.getElementById('tabela-pedidos-dados');
+        
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        if (!Array.isArray(pedidos) || pedidos.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Nenhum pedido encontrado.</td></tr>`;
+            return;
+        }
+
+        pedidos.forEach(p => {
+            // Define a cor baseada no status
+            let statusColor = 'var(--text-main)';
+            if (p.status === 'Em trânsito') statusColor = 'var(--color-transit)';
+            if (p.status === 'Entregue') statusColor = 'var(--color-success)';
+            if (p.status === 'Cancelado' || p.status === 'Atrasado') statusColor = 'var(--color-error)';
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>#${p.id || p.id_pedido}</td>
+                <td>${p.nome_cliente || p.id_cliente}</td>
+                <td>${p.nome_entregador || p.id_entregador}</td>
+                <td>${p.nome_encomenda || p.id_encomenda}</td>
+                <td><span style="color: ${statusColor}; font-weight: bold;">${p.status}</span></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (err) {
+        console.error('Erro ao buscar pedidos:', err);
+    }
+}
+
+// Função centralizadora para atualizar todas as tabelas de uma vez
+function atualizarTodasAsTabelas() {
+    listarClientes();
+    listarEntregadores();
+    listarEncomendas();
+    listarPedidos();
+}
+
+async function fazerLogin() {
+    const username = document.getElementById('login-user').value
+    const password = document.getElementById('login-pass').value
+
+    const res = await fetch(`${API}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `username=${username}&password=${password}`
+    })
+
+    const msg = document.getElementById('login-msg')
+
+    if (res.ok) {
+        const data = await res.json()
+        localStorage.setItem('token', data.access_token)
+        document.getElementById('modal-login').classList.add('hidden')
+        carregarDashboard()
+    } else {
+        msg.textContent = '❌ Usuário ou senha incorretos'
+        msg.style.color = 'red'
+    }
+}
+
+if (!getToken()) {
+    document.getElementById('modal-login').classList.remove('hidden')
+}
+
+async function carregarSecao(id, arquivo) {
+    try {
+        const res = await fetch(arquivo)
+        const html = await res.text()
+        document.getElementById(id).innerHTML = html
+
+        if (id !== 'cadastros') {
+            document.getElementById(id).classList.add('hidden-secao')
+        }
+
+        // Carrega os dados quando a seção de consulta for carregada
+        if (id === 'consulta') {
+            listarClientes()
+            listarEntregadores()
+            listarEncomendas()
+            listarPedidos()
+        }
+
+    } catch (error) {
+        console.error(`Erro ao carregar a seção ${id}:`, error)
+    }
+}

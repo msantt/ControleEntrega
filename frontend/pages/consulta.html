@@ -1,3 +1,91 @@
 <div class="container">
-<h2>Consulta</h2>
+    <h2>Consulta</h2>
+    <h3>Monitore e visualize os registros do seu sistema</h3>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="c-consulta">Clientes</button>
+        <button class="tab" data-tab="e-consulta">Entregadores</button>
+        <button class="tab" data-tab="en-consulta">Encomendas</button>
+        <button class="tab" data-tab="p-consulta">Pedidos</button>
+    </div>
+
+    <div class="tab-content" id="tab-c-consulta">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Localização</th>
+                </tr>
+            </thead>
+            <tbody id="tabela-clientes-dados">
+                <tr>
+                    <td>Exemplo Cliente</td>
+                    <td>000.000.000-00</td>
+                    <td>Rua Exemplo, 123</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tab-content hidden" id="tab-e-consulta">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Telefone</th>
+                </tr>
+            </thead>
+            <tbody id="tabela-entregadores-dados">
+                <tr>
+                    <td>Exemplo Entregador</td>
+                    <td>111.111.111-11</td>
+                    <td>(11) 99999-9999</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tab-content hidden" id="tab-en-consulta">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID / Código</th>
+                    <th>Nome da Encomenda</th>
+                    <th>Quantidade</th>
+                </tr>
+            </thead>
+            <tbody id="tabela-encomendas-dados">
+                <tr>
+                    <td>#1001</td>
+                    <td>Caixa de Ferramentas</td>
+                    <td>2</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tab-content hidden" id="tab-p-consulta">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID Pedido</th>
+                    <th>Cliente</th>
+                    <th>Entregador</th>
+                    <th>Encomenda</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="tabela-pedidos-dados">
+                <tr>
+                    <td>#501</td>
+                    <td>Carlos Silva</td>
+                    <td>Marcos Souza</td>
+                    <td>Pacote A1</td>
+                    <td><span style="color: var(--color-transit); font-weight: bold;">Em trânsito</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

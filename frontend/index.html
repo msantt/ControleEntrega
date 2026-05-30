@@ -6,25 +6,26 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&  display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <title>Controle Entregas</title>
 </head>
-
 <body>
+
     <header class="header">
         <div class="container">
             <a href="#"><img src="img/logo.png" alt="Logo"></a>
-                <nav>
-                    <ul>
-                        <li><a href="#dashboard">Dashboard</a></li>
-                        <li><a href="#cadastros">Cadastros</a></li>
-                        <li><a href="#consulta">Consulta</a></li>
-                        <li><a href="#atualizar">Atualizar</a></li>
-                    </ul>
-                </nav>
-            </div>
+            <nav>
+                <ul>
+                    <li><a href="#dashboard">Dashboard</a></li>
+                    <li><a href="#cadastros">Cadastros</a></li>
+                    <li><a href="#consulta">Consulta</a></li>
+                    <li><a href="#atualizar">Atualizar</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
+
     <section class="dashboard" id="dashboard">
         <div class="container">
             <h2>Visão Geral</h2>
@@ -37,7 +38,7 @@
                 </div>
                 <div class="card">
                     <div class="card-icon"><i class="fa-solid fa-truck"></i></div>
-                    <div class="card-label">Em transito</div>
+                    <div class="card-label">Em trânsito</div>
                     <div class="card-value">0</div>
                 </div>
                 <div class="card">
@@ -46,19 +47,29 @@
                     <div class="card-value">0</div>
                 </div>
                 <div class="card">
-                    <div class="card-icon"><i class="fa-solid fa-clock"></i></div> 
-                    <div class="card-label">Atrasados</div>
+                    <div class="card-icon"><i class="fa-solid fa-clock"></i></div>
+                    <div class="card-label">Cancelados</div>
                     <div class="card-value">0</div>
                 </div>
             </div>
-
         </div>
     </section>
- 
+
     <section id="cadastros"></section>
     <section id="consulta"></section>
     <section id="atualizar"></section>
 
+    <div class="modal-overlay hidden" id="modal-login">
+        <div class="modal">
+            <h2>Login</h2>
+            <p>Acesse o sistema para continuar</p>
+            <input type="text" id="login-user" placeholder="Usuário">
+            <input type="password" id="login-pass" placeholder="Senha">
+            <button onclick="fazerLogin()">Entrar</button>
+            <p id="login-msg"></p>
+        </div>
+    </div>
+
     <script src="js/script.js"></script>
 </body>
-</html> 
+</html>
