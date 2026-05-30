@@ -457,3 +457,19 @@ section.hidden-secao {
 }
 
 .modal button:hover { background-color: #e06c00; }
+
+.data-table th, .data-table td {
+    padding: 14px 16px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+    background-color: var(--bg-card);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    text-align: center;
+}

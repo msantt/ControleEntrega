@@ -325,15 +325,21 @@ async function listarClientes() {
             return;
         }
 
-        clientes.forEach(c => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${c.nome || 'Sem nome'}</td>
-                <td>${c.cpf || '-'}</td>
-                <td>${c.localizacao || '-'}</td>
-            `;
-            tbody.appendChild(tr);
-        });
+        clientes.forEach((c, index) => {
+    const tr = document.createElement('tr')
+    tr.dataset.id = c._id  // guarda o _id escondido na linha
+    tr.innerHTML = `
+        <td>#${index + 1}</td>
+        <td>${c.nome || 'Sem nome'}</td>
+        <td>${c.cpf || '-'}</td>
+        <td>${c.localizacao || '-'}</td>
+        <td>
+            <button onclick="editarCliente('${c._id}')">✏️</button>
+            <button onclick="deletarCliente('${c._id}')">🗑️</button>
+        </td>
+    `
+    tbody.appendChild(tr)
+})
     } catch (e) {
         console.error('Erro ao buscar clientes:', e);
     }
@@ -387,15 +393,15 @@ async function listarEncomendas() {
             return;
         }
 
-        encomendas.forEach(en => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>#${en.id || en.id_encomenda}</td>
-                <td>${en.nome}</td>
-                <td>${en.quantidade}</td>
-            `;
-            tbody.appendChild(tr);
-        });
+       encomendas.forEach((en, index) => {
+    const tr = document.createElement('tr')
+    tr.innerHTML = `
+        <td>#${index + 1}</td>
+        <td>${en.nome}</td>
+        <td>${en.quantidade}</td>
+    `
+    tbody.appendChild(tr)
+})
     } catch (err) {
         console.error('Erro ao buscar encomendas:', err);
     }
@@ -418,23 +424,22 @@ async function listarPedidos() {
             return;
         }
 
-        pedidos.forEach(p => {
-            // Define a cor baseada no status
-            let statusColor = 'var(--text-main)';
-            if (p.status === 'Em trânsito') statusColor = 'var(--color-transit)';
-            if (p.status === 'Entregue') statusColor = 'var(--color-success)';
-            if (p.status === 'Cancelado' || p.status === 'Atrasado') statusColor = 'var(--color-error)';
+        pedidos.forEach((p, index) => {
+    let statusColor = 'var(--text-main)';
+    if (p.status === 'Em trânsito') statusColor = 'var(--color-transit)';
+    if (p.status === 'Entregue') statusColor = 'var(--color-success)';
+    if (p.status === 'Cancelado') statusColor = 'var(--color-error)';
 
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>#${p.id || p.id_pedido}</td>
-                <td>${p.nome_cliente || p.id_cliente}</td>
-                <td>${p.nome_entregador || p.id_entregador}</td>
-                <td>${p.nome_encomenda || p.id_encomenda}</td>
-                <td><span style="color: ${statusColor}; font-weight: bold;">${p.status}</span></td>
-            `;
-            tbody.appendChild(tr);
-        });
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+        <td>#${index + 1}</td>
+        <td>Cliente #${index + 1}</td>
+        <td>Entregador #${index + 1}</td>
+        <td>Encomenda #${index + 1}</td>
+        <td><span style="color: ${statusColor}; font-weight: bold;">${p.status}</span></td>
+    `;
+    tbody.appendChild(tr);
+});
     } catch (err) {
         console.error('Erro ao buscar pedidos:', err);
     }
