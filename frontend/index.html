@@ -8,15 +8,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Controle Entregas</title>
 </head>
 <body>
 
     <header class="header">
         <div class="container">
-            <a href="#"><img src="img/logo.png" alt="Logo"></a>
+            <a href="#dashboard"><img src="img/logo.png" alt="Logo"></a>
             <nav>
                 <ul>
+                    <li><a href="#dashboard" class="active">Dashboard</a></li>
                     <li><a href="#cadastros">Cadastros</a></li>
                     <li><a href="#atualizar">Atualizar</a></li>
                     <li><a href="#consulta">Consulta</a></li>
@@ -25,10 +27,11 @@
         </div>
     </header>
 
-    <section class="dashboard" id="dashboard">
+    <section class="dashboard section-container" id="dashboard">
         <div class="container">
-            <h2>Visão Geral</h2>
-            <h3>Acompanhe o status de suas entregas em tempo real</h3>
+            <h2><i class="fa-solid fa-chart-line"></i> Visão Geral</h2>
+            <h3>Acompanhe o status das entregas em tempo real</h3>
+
             <div class="cards">
                 <div class="card">
                     <div class="card-icon"><i class="fa-solid fa-box"></i></div>
@@ -51,15 +54,29 @@
                     <div class="card-value">0</div>
                 </div>
             </div>
+
+            <div class="chart-box" id="dashboard-grafico">
+                <h4>Eficiência de entregas e pendências</h4>
+                <div class="chart-filtros">
+                    <button class="tab active" data-periodo="semana">Semana</button>
+                    <button class="tab" data-periodo="mes">Mês</button>
+                    <button class="tab" data-periodo="ano">Ano</button>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="chartProdutividade"></canvas>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section id="cadastros"></section>
-    <section id="consulta"></section>
-    <section id="atualizar"></section>
+    <section id="cadastros" class="section-container hidden-secao"></section>
+    <section id="atualizar" class="section-container bg-alt hidden-secao"></section>
+    <section id="consulta" class="section-container hidden-secao"></section>
+    <section id="graficos" class="section-container bg-alt hidden-secao"></section>
 
     <div class="modal-overlay hidden" id="modal-login">
         <div class="modal">
+            <div class="lock-icon">🔒</div>
             <h2>Login</h2>
             <p>Acesse o sistema para continuar</p>
             <input type="text" id="login-user" placeholder="Usuário">
@@ -68,7 +85,7 @@
             <p id="login-msg"></p>
         </div>
     </div>
-
+    
     <script src="js/script.js"></script>
 </body>
 </html>

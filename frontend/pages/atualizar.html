@@ -1,90 +1,97 @@
 <div class="container">
-    <h2>Atualizar</h2>
+    <h2><i class="fa-solid fa-pen-to-square"></i> Atualizar</h2>
     <h3>Busque, edite ou remova registros do sistema</h3>
 
     <div class="tabs">
-        <button class="tab active" data-tab="u-cliente">Cliente</button>
-        <button class="tab" data-tab="u-entregador">Entregador</button>
-        <button class="tab" data-tab="u-encomenda">Encomenda</button>
-        <button class="tab" data-tab="u-pedido">Pedido</button>
+        <button class="tab active" data-tab="cliente-atualizar">Cliente</button>
+        <button class="tab" data-tab="entregador-atualizar">Entregador</button>
+        <button class="tab" data-tab="encomenda-atualizar">Encomenda</button>
+        <button class="tab" data-tab="pedido-atualizar">Pedido</button>
     </div>
 
-    <!-- CLIENTE -->
-    <div class="tab-content" id="tab-u-cliente">
-        <input type="text" id="busca-c-nome" placeholder="Buscar cliente por nome...">
-        <button onclick="buscarCliente()">🔍 Buscar</button>
-        <div id="resultado-cliente" style="display:none; margin-top:1em;">
-            <input type="hidden" id="u-c-id">
-            <input type="text" id="u-c-nome" placeholder="Nome">
-            <input type="text" id="u-c-cpf" placeholder="CPF">
-            <input type="text" id="u-c-localizacao" placeholder="Localização">
-            <div style="display:flex; gap:0.8em;">
-                <button onclick="atualizarCliente()">✏️ Atualizar</button>
-                <button onclick="deletarCliente()" style="background-color:#ef4444;">🗑️ Deletar</button>
+    <div class="tab-content" id="tab-cliente-atualizar">
+        <h3>Atualizar Cliente</h3>
+        <input type="text" id="busca-cliente-atualizar" placeholder="Digite CPF, email, nome ou código">
+        <button onclick="buscarClienteAtualizar()">Buscar Cliente</button>
+
+        <div id="resultado-cliente-atualizar" class="form-box" style="display:none; margin-top:20px;">
+            <h4>Dados do Cliente</h4>
+            <input type="hidden" id="c-atualizar-id">
+            <input type="text" id="c-atualizar-nome" placeholder="Nome">
+            <input type="text" id="c-atualizar-cpf" placeholder="CPF">
+            <input type="text" id="c-atualizar-email" placeholder="Email">
+            <input type="text" id="c-atualizar-localizacao" placeholder="Localização">
+
+            <div style="display:flex; gap:0.8em; margin-top:10px;">
+                <button onclick="atualizarCliente()">Atualizar</button>
+                <button onclick="deletarCliente()" style="background:#ef4444;">Deletar</button>
             </div>
         </div>
-        <p id="u-c-msg"></p>
+        <p id="c-atualizar-msg"></p>
     </div>
 
-    <!-- ENTREGADOR -->
-    <div class="tab-content hidden" id="tab-u-entregador">
-        <input type="text" id="busca-e-nome" placeholder="Buscar entregador por nome...">
-        <button onclick="buscarEntregador()">🔍 Buscar</button>
-        <div id="resultado-entregador" style="display:none; margin-top:1em;">
-            <input type="hidden" id="u-e-id">
-            <input type="text" id="u-e-nome" placeholder="Nome">
-            <input type="text" id="u-e-cpf" placeholder="CPF">
-            <input type="text" id="u-e-telefone" placeholder="Telefone">
-            <div style="display:flex; gap:0.8em;">
-                <button onclick="atualizarEntregador()">✏️ Atualizar</button>
-                <button onclick="deletarEntregador()" style="background-color:#ef4444;">🗑️ Deletar</button>
+    <div class="tab-content hidden" id="tab-entregador-atualizar">
+        <h3>Atualizar Entregador</h3>
+        <input type="text" id="busca-entregador-atualizar" placeholder="Digite CPF, telefone, nome ou código">
+        <button onclick="buscarEntregadorAtualizar()">Buscar Entregador</button>
+
+        <div id="resultado-entregador-atualizar" class="form-box" style="display:none; margin-top:20px;">
+            <h4>Dados do Entregador</h4>
+            <input type="hidden" id="e-atualizar-id">
+            <input type="text" id="e-atualizar-nome" placeholder="Nome">
+            <input type="text" id="e-atualizar-cpf" placeholder="CPF">
+            <input type="text" id="e-atualizar-numero" placeholder="Telefone">
+
+            <div style="display:flex; gap:0.8em; margin-top:10px;">
+                <button onclick="atualizarEntregador()">Atualizar</button>
+                <button onclick="deletarEntregador()" style="background:#ef4444;">Deletar</button>
             </div>
         </div>
-        <p id="u-e-msg"></p>
+        <p id="e-atualizar-msg"></p>
     </div>
 
-    <!-- ENCOMENDA -->
-    <div class="tab-content hidden" id="tab-u-encomenda">
-        <input type="text" id="busca-en-nome" placeholder="Buscar encomenda por nome...">
-        <button onclick="buscarEncomenda()">🔍 Buscar</button>
-        <div id="resultado-encomenda" style="display:none; margin-top:1em;">
-            <input type="hidden" id="u-en-id">
-            <input type="text" id="u-en-nome" placeholder="Nome">
-            <input type="number" id="u-en-quantidade" placeholder="Quantidade">
-            <div style="display:flex; gap:0.8em;">
-                <button onclick="atualizarEncomenda()">✏️ Atualizar</button>
-                <button onclick="deletarEncomenda()" style="background-color:#ef4444;">🗑️ Deletar</button>
+    <div class="tab-content hidden" id="tab-encomenda-atualizar">
+        <h3>Atualizar Encomenda</h3>
+        <input type="text" id="busca-encomenda-atualizar" placeholder="Digite nome ou código">
+        <button onclick="buscarEncomendaAtualizar()">Buscar Encomenda</button>
+
+        <div id="resultado-encomenda-atualizar" class="form-box" style="display:none; margin-top:20px;">
+            <h4>Dados da Encomenda</h4>
+            <input type="hidden" id="en-atualizar-id">
+            <input type="text" id="en-atualizar-nome" placeholder="Nome">
+            <input type="number" id="en-atualizar-quantidade" placeholder="Quantidade">
+
+            <div style="display:flex; gap:0.8em; margin-top:10px;">
+                <button onclick="atualizarEncomenda()">Atualizar</button>
+                <button onclick="deletarEncomenda()" style="background:#ef4444;">Deletar</button>
             </div>
         </div>
-        <p id="u-en-msg"></p>
+        <p id="en-atualizar-msg"></p>
     </div>
 
-    <!-- PEDIDO -->
-    <div class="tab-content hidden" id="tab-u-pedido">
-        <select id="busca-p-status">
-            <option value="">Buscar por status...</option>
-            <option value="Pendente">Pendente</option>
-            <option value="Em trânsito">Em trânsito</option>
-            <option value="Entregue">Entregue</option>
-            <option value="Cancelado">Cancelado</option>
-        </select>
-        <button onclick="buscarPedido()">🔍 Buscar</button>
-        <div id="resultado-pedido" style="display:none; margin-top:1em;">
-            <input type="hidden" id="u-p-id">
-            <input type="text" id="u-p-cliente" placeholder="ID do Cliente">
-            <input type="text" id="u-p-entregador" placeholder="ID do Entregador">
-            <input type="text" id="u-p-encomenda" placeholder="ID da Encomenda">
-            <select id="u-p-status">
+    <div class="tab-content hidden" id="tab-pedido-atualizar">
+        <h3>Atualizar Pedido</h3>
+        <input type="text" id="busca-pedido-atualizar" placeholder="Digite código, cliente, entregador ou encomenda">
+        <button onclick="buscarPedidoAtualizar()">Buscar Pedido</button>
+
+        <div id="resultado-pedido-atualizar" class="form-box" style="display:none; margin-top:20px;">
+            <h4>Dados do Pedido</h4>
+            <input type="hidden" id="p-atualizar-id">
+            <input type="text" id="p-atualizar-cliente" placeholder="ID do Cliente">
+            <input type="text" id="p-atualizar-entregador" placeholder="ID do Entregador">
+            <input type="text" id="p-atualizar-encomenda" placeholder="ID da Encomenda">
+            <select id="p-atualizar-status">
                 <option value="Pendente">Pendente</option>
                 <option value="Em trânsito">Em trânsito</option>
                 <option value="Entregue">Entregue</option>
                 <option value="Cancelado">Cancelado</option>
             </select>
-            <div style="display:flex; gap:0.8em;">
-                <button onclick="atualizarPedido()">✏️ Atualizar</button>
-                <button onclick="deletarPedido()" style="background-color:#ef4444;">🗑️ Deletar</button>
+
+            <div style="display:flex; gap:0.8em; margin-top:10px;">
+                <button onclick="atualizarPedido()">Atualizar</button>
+                <button onclick="deletarPedido()" style="background:#ef4444;">Deletar</button>
             </div>
         </div>
-        <p id="u-p-msg"></p>
+        <p id="p-atualizar-msg"></p>
     </div>
 </div>

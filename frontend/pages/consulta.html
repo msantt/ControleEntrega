@@ -1,91 +1,73 @@
 <div class="container">
-    <h2>Consulta</h2>
-    <h3>Monitore e visualize os registros do seu sistema</h3>
+    <h2><i class="fa-solid fa-magnifying-glass"></i> Consulta</h2>
+    <h3>Veja os registros cadastrados e copie os IDs quando precisar</h3>
 
     <div class="tabs">
-        <button class="tab active" data-tab="c-consulta">Clientes</button>
-        <button class="tab" data-tab="e-consulta">Entregadores</button>
-        <button class="tab" data-tab="en-consulta">Encomendas</button>
-        <button class="tab" data-tab="p-consulta">Pedidos</button>
+        <button class="tab active" data-tab="cliente-consulta">Cliente</button>
+        <button class="tab" data-tab="entregador-consulta">Entregador</button>
+        <button class="tab" data-tab="encomenda-consulta">Encomenda</button>
+        <button class="tab" data-tab="pedido-consulta">Pedido</button>
     </div>
 
-    <div class="tab-content" id="tab-c-consulta">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>CPF</th>
-                    <th>Localização</th>
-                </tr>
-            </thead>
-            <tbody id="tabela-clientes-dados">
-                <tr>
-                    <td>Exemplo Cliente</td>
-                    <td>000.000.000-00</td>
-                    <td>Rua Exemplo, 123</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="tab-content" id="tab-cliente-consulta">
+        <h3>Consulta de Cliente</h3>
+        <input type="text" id="busca-cliente-consulta" placeholder="Digite CPF, email, nome ou código">
+        <button onclick="buscarClienteConsulta()">Buscar Cliente</button>
+
+        <div id="resultado-cliente-consulta" class="form-box" style="display:none; margin-top:20px;">
+            <h4>Dados do Cliente</h4>
+            <p><strong>ID:</strong> <span id="c-consulta-id"></span></p>
+            <p><strong>Nome:</strong> <span id="c-consulta-nome"></span></p>
+            <p><strong>CPF:</strong> <span id="c-consulta-cpf"></span></p>
+            <p><strong>Email:</strong> <span id="c-consulta-email"></span></p>
+            <p><strong>Localização:</strong> <span id="c-consulta-localizacao"></span></p>
+        </div>
     </div>
 
-    <div class="tab-content hidden" id="tab-e-consulta">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>CPF</th>
-                    <th>Telefone</th>
-                </tr>
-            </thead>
-            <tbody id="tabela-entregadores-dados">
-                <tr>
-                    <td>Exemplo Entregador</td>
-                    <td>111.111.111-11</td>
-                    <td>(11) 99999-9999</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="tab-content hidden" id="tab-entregador-consulta">
+        <h3>Consulta de Entregador</h3>
+        <input type="text" id="busca-entregador-consulta" placeholder="Digite CPF, telefone, nome ou código">
+        <button onclick="buscarEntregadorConsulta()">Buscar Entregador</button>
+
+        <div id="resultado-entregador-consulta" class="form-box" style="display:none; margin-top:20px;">
+            <h4>Dados do Entregador</h4>
+            <p><strong>ID:</strong> <span id="e-consulta-id"></span></p>
+            <p><strong>Nome:</strong> <span id="e-consulta-nome"></span></p>
+            <p><strong>CPF:</strong> <span id="e-consulta-cpf"></span></p>
+            <p><strong>Telefone:</strong> <span id="e-consulta-numero"></span></p>
+        </div>
     </div>
 
-    <div class="tab-content hidden" id="tab-en-consulta">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>ID / Código</th>
-                    <th>Nome da Encomenda</th>
-                    <th>Quantidade</th>
-                </tr>
-            </thead>
-            <tbody id="tabela-encomendas-dados">
-                <tr>
-                    <td>#1001</td>
-                    <td>Caixa de Ferramentas</td>
-                    <td>2</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="tab-content hidden" id="tab-encomenda-consulta">
+        <h3>Consulta de Encomenda</h3>
+        <input type="text" id="busca-encomenda-consulta" placeholder="Digite nome ou código">
+        <button onclick="buscarEncomendaConsulta()">Buscar Encomenda</button>
+
+        <div id="resultado-encomenda-consulta" class="form-box" style="display:none; margin-top:20px;">
+            <h4>Dados da Encomenda</h4>
+            <p><strong>ID:</strong> <span id="en-consulta-id"></span></p>
+            <p><strong>Nome:</strong> <span id="en-consulta-nome"></span></p>
+            <p><strong>Quantidade:</strong> <span id="en-consulta-quantidade"></span></p>
+        </div>
     </div>
 
-    <div class="tab-content hidden" id="tab-p-consulta">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>ID Pedido</th>
-                    <th>Cliente</th>
-                    <th>Entregador</th>
-                    <th>Encomenda</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="tabela-pedidos-dados">
-                <tr>
-                    <td>#501</td>
-                    <td>Carlos Silva</td>
-                    <td>Marcos Souza</td>
-                    <td>Pacote A1</td>
-                    <td><span style="color: var(--color-transit); font-weight: bold;">Em trânsito</span></td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="tab-content hidden" id="tab-pedido-consulta">
+    <h3>Consulta de Pedido</h3>
+
+    <input type="text" id="busca-pedido-consulta" placeholder="Digite código, cliente, entregador ou encomenda">
+
+  <select id="filtro-status-pedido" onchange="atualizarFiltroStatus()">
+    <option value="">Todos os status</option>
+    <option value="Pendente">Pendente</option>
+    <option value="Em trânsito">Em trânsito</option>
+    <option value="Entregue">Entregue</option>
+    <option value="Cancelado">Cancelado</option>
+</select>
+
+<button onclick="buscarPedidoConsulta()">Buscar Pedido</button>
+
+    <div id="resultado-pedido-consulta" class="form-box" style="display:none; margin-top:20px;">
+        <h4>Dados do Pedido</h4>
     </div>
+</div>
 </div>
