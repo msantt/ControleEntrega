@@ -12,6 +12,12 @@ def convertId(documento: Dict[str, Any]) -> Dict[str, Any]:
     return documento
 
 
+# ⚠️ AVISO (Klyor): depois da correção do bug de ID, essa função ficou sem
+# nenhuma chamada no resto do arquivo (era usada só pelos read_*/update_*/drop_*
+# antigos, que buscavam por "_id" do Mongo). Mantive ela aqui só porque
+# "convertId" ainda expõe o _id pro frontend em cada documento — então se um dia
+# você quiser um endpoint interno/admin que busca por ObjectId puro, ela já existe.
+# Se não for usar, dá pra apagar junto com os imports de ObjectId/InvalidId no topo.
 def validar_id(id_str: str) -> ObjectId:
     try:
         return ObjectId(id_str)
@@ -115,18 +121,22 @@ def create_encomenda(nome: str, quantidade: int) -> Dict[str, Any]:
 
 def create_pedido(id_cliente: str, id_entregador: str, id_encomenda: str, status: str) -> Dict[str, Any]:
     cliente = _buscar_por_codigo(clientes, id_cliente)
-    if not cliente:
-        raise HTTPException(status_code=404, detail=f"Cliente '{id_cliente}' não encontrado no sistema")
-
     entregador = _buscar_por_codigo(entregadores, id_entregador)
-    if not entregador:
-        raise HTTPException(status_code=404, detail=f"Entregador '{id_entregador}' não encontrado no sistema")
-
     encomenda = _buscar_por_codigo(encomendas, id_encomenda)
+
+    if not cliente:
+        raise HTTPException(status_code=404, detail="Cliente não encontrado")
+    if not entregador:
+        raise HTTPException(status_code=404, detail="Entregador não encontrado")
     if not encomenda:
-        raise HTTPException(status_code=404, detail=f"Encomenda '{id_encomenda}' não encontrada no sistema")
+        raise HTTPException(status_code=404, detail="Encomenda não encontrada")
 
     pedido = {
+        # 🛠️ CORREÇÃO (Klyor): Pedido não tinha seu próprio codigo_identificacao,
+        # diferente de Cliente/Entregador/Encomenda. Isso quebrava o botão de
+        # deletar/editar no frontend, que tentava usar p.codigo_identificacao
+        # (undefined, pois o campo nunca existia no documento salvo).
+        "codigo_identificacao": _proximo_codigo(pedidos, "PED"),
         "id_cliente": cliente["codigo_identificacao"],
         "id_entregador": entregador["codigo_identificacao"],
         "id_encomenda": encomenda["codigo_identificacao"],
@@ -204,36 +214,51 @@ def read_pedidos(skip: int = 0, limit: int = 10, status: Optional[str] = None, i
     return lista_pedidos
 
 
-def read_cliente(id_cliente: str) -> Dict[str, Any]:
-    result = clientes.find_one({"_id": validar_id(id_cliente)})
+# 🛠️ CORREÇÃO (Klyor): read_cliente/read_entregador/read_encomenda/read_pedido
+# antes usavam validar_id() + busca por "_id" (ObjectId do Mongo). Só que os
+# routers (routers/*.py) e o frontend (frontend/js) SEMPRE mandam
+# codigo_identificacao (ex: "CLI001"), nunca o ObjectId. Isso causava dois erros:
+#   1) TypeError: os routers chamam read_cliente(codigo_identificacao=...),
+#      mas a função só aceitava o parâmetro id_cliente -> nome não batia.
+#   2) mesmo corrigindo o nome, "CLI001" não é um ObjectId válido -> 400.
+# Solução: usar o mesmo padrão que create_pedido já usa (_buscar_por_codigo),
+# assim o sistema inteiro passa a se identificar de UM jeito só.
+def read_cliente(codigo_identificacao: str) -> Dict[str, Any]:
+    result = _buscar_por_codigo(clientes, codigo_identificacao)
     if not result:
         raise HTTPException(status_code=404, detail="Cliente não encontrado")
     return convertId(result)
 
 
-def read_entregador(id_entregador: str) -> Dict[str, Any]:
-    result = entregadores.find_one({"_id": validar_id(id_entregador)})
+def read_entregador(codigo_identificacao: str) -> Dict[str, Any]:
+    result = _buscar_por_codigo(entregadores, codigo_identificacao)
     if not result:
         raise HTTPException(status_code=404, detail="Entregador não encontrado")
     return convertId(result)
 
 
-def read_encomenda(id_encomenda: str) -> Dict[str, Any]:
-    result = encomendas.find_one({"_id": validar_id(id_encomenda)})
+def read_encomenda(codigo_identificacao: str) -> Dict[str, Any]:
+    result = _buscar_por_codigo(encomendas, codigo_identificacao)
     if not result:
         raise HTTPException(status_code=404, detail="Encomenda não encontrada")
     return convertId(result)
 
 
 def read_pedido(codigo_identificacao: str) -> Dict[str, Any]:
-    result = pedidos.find_one({"codigo_identificacao": codigo_identificacao.strip().upper()})
+    result = _buscar_por_codigo(pedidos, codigo_identificacao)
     if not result:
         raise HTTPException(status_code=404, detail="Pedido não encontrado")
     pedido = convertId(result)
     return hidratar_pedido(pedido)
 
 
-def update_cliente(id_cliente: str, nome: Optional[str] = None, cpf: Optional[str] = None, email: Optional[str] = None, localizacao: Optional[str] = None) -> Dict[str, str]:
+# 🛠️ CORREÇÃO (Klyor): mesma lógica do read_* — update_* e drop_* também
+# filtravam por "_id" (ObjectId), mas os routers e o frontend sempre mandam
+# codigo_identificacao. Agora o filtro do Mongo usa o campo "codigo_identificacao"
+# diretamente, sem precisar converter pra ObjectId em nenhum momento. Isso também
+# esconde o _id interno do banco do "mundo de fora" — só o código de negócio
+# circula pela API (mesma ideia da Stripe: cus_..., não o ID cru do banco deles).
+def update_cliente(codigo_identificacao: str, nome: Optional[str] = None, cpf: Optional[str] = None, email: Optional[str] = None, localizacao: Optional[str] = None) -> Dict[str, str]:
     update_fields = {}
     if nome:
         update_fields["nome"] = nome.strip()
@@ -247,13 +272,13 @@ def update_cliente(id_cliente: str, nome: Optional[str] = None, cpf: Optional[st
     if not update_fields:
         raise HTTPException(status_code=400, detail="Nenhum campo modificado para atualização.")
 
-    result = clientes.update_one({"_id": validar_id(id_cliente)}, {"$set": update_fields})
+    result = clientes.update_one({"codigo_identificacao": codigo_identificacao}, {"$set": update_fields})
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Cliente não encontrado")
     return {"message": "Cliente atualizado com sucesso!"}
 
 
-def update_entregador(id_entregador: str, nome: Optional[str] = None, cpf: Optional[str] = None, numero: Optional[str] = None) -> Dict[str, str]:
+def update_entregador(codigo_identificacao: str, nome: Optional[str] = None, cpf: Optional[str] = None, numero: Optional[str] = None) -> Dict[str, str]:
     update_fields = {}
     if nome:
         update_fields["nome"] = nome.strip()
@@ -265,13 +290,13 @@ def update_entregador(id_entregador: str, nome: Optional[str] = None, cpf: Optio
     if not update_fields:
         raise HTTPException(status_code=400, detail="Nenhum campo modificado para atualização.")
 
-    result = entregadores.update_one({"_id": validar_id(id_entregador)}, {"$set": update_fields})
+    result = entregadores.update_one({"codigo_identificacao": codigo_identificacao}, {"$set": update_fields})
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Entregador não encontrado")
     return {"message": "Entregador atualizado com sucesso!"}
 
 
-def update_encomenda(id_encomenda: str, nome: Optional[str] = None, quantidade: Optional[int] = None) -> Dict[str, str]:
+def update_encomenda(codigo_identificacao: str, nome: Optional[str] = None, quantidade: Optional[int] = None) -> Dict[str, str]:
     update_fields = {}
     if nome:
         update_fields["nome"] = nome.strip()
@@ -281,7 +306,7 @@ def update_encomenda(id_encomenda: str, nome: Optional[str] = None, quantidade: 
     if not update_fields:
         raise HTTPException(status_code=400, detail="Nenhum campo modificado para atualização.")
 
-    result = encomendas.update_one({"_id": validar_id(id_encomenda)}, {"$set": update_fields})
+    result = encomendas.update_one({"codigo_identificacao": codigo_identificacao}, {"$set": update_fields})
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Encomenda não encontrada")
     return {"message": "Encomenda atualizada com sucesso!"}
@@ -313,38 +338,35 @@ def update_pedido(codigo_identificacao: str, id_cliente: Optional[str] = None, i
     if not update_fields:
         raise HTTPException(status_code=400, detail="Nenhum campo modificado para atualização.")
 
-    result = pedidos.update_one(
-        {"codigo_identificacao": codigo_identificacao.strip().upper()},
-        {"$set": update_fields}
-    )
+    result = pedidos.update_one({"codigo_identificacao": codigo_identificacao}, {"$set": update_fields})
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Pedido não encontrado")
     return {"message": "Pedido atualizado com sucesso!"}
 
 
-def drop_cliente(id_cliente: str) -> Dict[str, str]:
-    result = clientes.delete_one({"_id": validar_id(id_cliente)})
+def drop_cliente(codigo_identificacao: str) -> Dict[str, str]:
+    result = clientes.delete_one({"codigo_identificacao": codigo_identificacao})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Cliente não encontrado")
     return {"message": "Cliente deletado com sucesso!"}
 
 
-def drop_entregador(id_entregador: str) -> Dict[str, str]:
-    result = entregadores.delete_one({"_id": validar_id(id_entregador)})
+def drop_entregador(codigo_identificacao: str) -> Dict[str, str]:
+    result = entregadores.delete_one({"codigo_identificacao": codigo_identificacao})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Entregador não encontrado")
     return {"message": "Entregador deletado com sucesso!"}
 
 
-def drop_encomenda(id_encomenda: str) -> Dict[str, str]:
-    result = encomendas.delete_one({"_id": validar_id(id_encomenda)})
+def drop_encomenda(codigo_identificacao: str) -> Dict[str, str]:
+    result = encomendas.delete_one({"codigo_identificacao": codigo_identificacao})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Encomenda não encontrada")
     return {"message": "Encomenda deletada com sucesso!"}
 
 
 def drop_pedido(codigo_identificacao: str) -> Dict[str, str]:
-    result = pedidos.delete_one({"codigo_identificacao": codigo_identificacao.strip().upper()})
+    result = pedidos.delete_one({"codigo_identificacao": codigo_identificacao})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Pedido não encontrado")
     return {"message": "Pedido deletado com sucesso!"}

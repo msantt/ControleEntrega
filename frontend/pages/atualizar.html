@@ -16,10 +16,10 @@
 
         <div id="resultado-cliente-atualizar" class="form-box" style="display:none; margin-top:20px;">
             <h4>Dados do Cliente</h4>
-            <input type="hidden" id="c-atualizar-id">
+            <input type="text" id="c-atualizar-id" placeholder="ID gerado" readonly>
             <input type="text" id="c-atualizar-nome" placeholder="Nome">
-            <input type="text" id="c-atualizar-cpf" placeholder="CPF">
-            <input type="text" id="c-atualizar-email" placeholder="Email">
+            <input type="text" id="c-atualizar-cpf" placeholder="000.000.000-00" inputmode="numeric" maxlength="14">
+            <input type="email" id="c-atualizar-email" placeholder="Email">
             <input type="text" id="c-atualizar-localizacao" placeholder="Localização">
 
             <div style="display:flex; gap:0.8em; margin-top:10px;">
@@ -37,10 +37,11 @@
 
         <div id="resultado-entregador-atualizar" class="form-box" style="display:none; margin-top:20px;">
             <h4>Dados do Entregador</h4>
-            <input type="hidden" id="e-atualizar-id">
+            <input type="text" id="e-atualizar-id" placeholder="ID gerado" readonly>
             <input type="text" id="e-atualizar-nome" placeholder="Nome">
-            <input type="text" id="e-atualizar-cpf" placeholder="CPF">
-            <input type="text" id="e-atualizar-numero" placeholder="Telefone">
+            <input type="text" id="e-atualizar-cpf" placeholder="000.000.000-00" inputmode="numeric" maxlength="14">
+            <input type="email" id="e-atualizar-email" placeholder="Email">
+            <input type="text" id="e-atualizar-numero" placeholder="(00) 00000-0000" inputmode="numeric" maxlength="15">
 
             <div style="display:flex; gap:0.8em; margin-top:10px;">
                 <button onclick="atualizarEntregador()">Atualizar</button>
@@ -57,8 +58,9 @@
 
         <div id="resultado-encomenda-atualizar" class="form-box" style="display:none; margin-top:20px;">
             <h4>Dados da Encomenda</h4>
-            <input type="hidden" id="en-atualizar-id">
-            <input type="text" id="en-atualizar-nome" placeholder="Nome">
+            <input type="text" id="en-atualizar-id" placeholder="ID gerado" readonly>
+            <input type="text" id="en-atualizar-codigo" placeholder="Código único">
+            <input type="text" id="en-atualizar-nome" placeholder="Nome da encomenda">
             <input type="number" id="en-atualizar-quantidade" placeholder="Quantidade">
 
             <div style="display:flex; gap:0.8em; margin-top:10px;">
@@ -76,7 +78,7 @@
 
         <div id="resultado-pedido-atualizar" class="form-box" style="display:none; margin-top:20px;">
             <h4>Dados do Pedido</h4>
-            <input type="hidden" id="p-atualizar-id">
+            <input type="text" id="p-atualizar-id" placeholder="ID gerado" readonly>
             <input type="text" id="p-atualizar-cliente" placeholder="ID do Cliente">
             <input type="text" id="p-atualizar-entregador" placeholder="ID do Entregador">
             <input type="text" id="p-atualizar-encomenda" placeholder="ID da Encomenda">

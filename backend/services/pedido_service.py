@@ -17,7 +17,11 @@ def service_create_pedido(id_cliente, id_entregador, id_encomenda, status):
     read_encomenda(id_encomenda)
     return create_pedido(id_cliente,id_entregador, id_encomenda, status)
 
-def service_update_pedido(id_pedido,id_cliente: str = None, id_entregador: str = None, id_encomenda: str = None, status: str = None):
+# 🛠️ CORREÇÃO (Klyor): o parâmetro se chamava "id_pedido", mas o router
+# routers/pedidos.py (função putPedido) chama essa função com a keyword
+# codigo_identificacao=... -> mesmo TypeError do bug #1, só que uma camada
+# acima do crud.py. Renomeado pra bater com quem chama.
+def service_update_pedido(codigo_identificacao, id_cliente: str = None, id_entregador: str = None, id_encomenda: str = None, status: str = None):
     if status:
         validar_status(status)
     if id_cliente:
@@ -27,5 +31,4 @@ def service_update_pedido(id_pedido,id_cliente: str = None, id_entregador: str =
     if id_encomenda:
         read_encomenda(id_encomenda)
     from repositories.crud import update_pedido
-    return update_pedido(id_pedido, id_cliente, id_entregador, id_encomenda, status)
-
+    return update_pedido(codigo_identificacao, id_cliente, id_entregador, id_encomenda, status)

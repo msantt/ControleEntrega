@@ -9,65 +9,144 @@
         <button class="tab" data-tab="pedido-consulta">Pedido</button>
     </div>
 
+    <!-- ===================== CLIENTE ===================== -->
     <div class="tab-content" id="tab-cliente-consulta">
         <h3>Consulta de Cliente</h3>
-        <input type="text" id="busca-cliente-consulta" placeholder="Digite CPF, email, nome ou código">
-        <button onclick="buscarClienteConsulta()">Buscar Cliente</button>
 
-        <div id="resultado-cliente-consulta" class="form-box" style="display:none; margin-top:20px;">
-            <h4>Dados do Cliente</h4>
+        <div class="search-bar">
+            <input type="text" id="busca-cliente-consulta" placeholder="Digite CPF, email, nome ou código">
+            <button onclick="buscarClienteConsulta()">Buscar Cliente</button>
+        </div>
+
+        <div id="resultado-cliente-consulta" class="form-box" style="display:none;">
+            <h3>Dados do Cliente</h3>
             <p><strong>ID:</strong> <span id="c-consulta-id"></span></p>
             <p><strong>Nome:</strong> <span id="c-consulta-nome"></span></p>
             <p><strong>CPF:</strong> <span id="c-consulta-cpf"></span></p>
             <p><strong>Email:</strong> <span id="c-consulta-email"></span></p>
             <p><strong>Localização:</strong> <span id="c-consulta-localizacao"></span></p>
         </div>
+
+        <div class="table-wrapper" style="margin-top:20px;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Email</th>
+                        <th>Localização</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-clientes-dados">
+                    <tr><td colspan="5">Carregando...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
+    <!-- ===================== ENTREGADOR ===================== -->
     <div class="tab-content hidden" id="tab-entregador-consulta">
         <h3>Consulta de Entregador</h3>
-        <input type="text" id="busca-entregador-consulta" placeholder="Digite CPF, telefone, nome ou código">
-        <button onclick="buscarEntregadorConsulta()">Buscar Entregador</button>
 
-        <div id="resultado-entregador-consulta" class="form-box" style="display:none; margin-top:20px;">
-            <h4>Dados do Entregador</h4>
+        <div class="search-bar">
+            <input type="text" id="busca-entregador-consulta" placeholder="Digite CPF, telefone, nome ou código">
+            <button onclick="buscarEntregadorConsulta()">Buscar Entregador</button>
+        </div>
+
+        <div id="resultado-entregador-consulta" class="form-box" style="display:none;">
+            <h3>Dados do Entregador</h3>
             <p><strong>ID:</strong> <span id="e-consulta-id"></span></p>
             <p><strong>Nome:</strong> <span id="e-consulta-nome"></span></p>
             <p><strong>CPF:</strong> <span id="e-consulta-cpf"></span></p>
             <p><strong>Telefone:</strong> <span id="e-consulta-numero"></span></p>
         </div>
+
+        <div class="table-wrapper" style="margin-top:20px;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Telefone</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-entregadores-dados">
+                    <tr><td colspan="4">Carregando...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
+    <!-- ===================== ENCOMENDA ===================== -->
     <div class="tab-content hidden" id="tab-encomenda-consulta">
         <h3>Consulta de Encomenda</h3>
-        <input type="text" id="busca-encomenda-consulta" placeholder="Digite nome ou código">
-        <button onclick="buscarEncomendaConsulta()">Buscar Encomenda</button>
 
-        <div id="resultado-encomenda-consulta" class="form-box" style="display:none; margin-top:20px;">
-            <h4>Dados da Encomenda</h4>
+        <div class="search-bar">
+            <input type="text" id="busca-encomenda-consulta" placeholder="Digite nome ou código">
+            <button onclick="buscarEncomendaConsulta()">Buscar Encomenda</button>
+        </div>
+
+        <div id="resultado-encomenda-consulta" class="form-box" style="display:none;">
+            <h3>Dados da Encomenda</h3>
             <p><strong>ID:</strong> <span id="en-consulta-id"></span></p>
             <p><strong>Nome:</strong> <span id="en-consulta-nome"></span></p>
             <p><strong>Quantidade:</strong> <span id="en-consulta-quantidade"></span></p>
         </div>
+
+        <div class="table-wrapper" style="margin-top:20px;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Quantidade</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-encomendas-dados">
+                    <tr><td colspan="3">Carregando...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
+    <!-- ===================== PEDIDO ===================== -->
     <div class="tab-content hidden" id="tab-pedido-consulta">
-    <h3>Consulta de Pedido</h3>
+        <h3>Consulta de Pedido</h3>
 
-    <input type="text" id="busca-pedido-consulta" placeholder="Digite código, cliente, entregador ou encomenda">
+        <div class="search-bar">
+            <input type="text" id="busca-pedido-consulta" placeholder="Digite código, cliente, entregador ou encomenda">
+            <select id="filtro-status-pedido">
+                <option value="">Todos os status</option>
+                <option value="Pendente">Pendente</option>
+                <option value="Em trânsito">Em trânsito</option>
+                <option value="Entregue">Entregue</option>
+                <option value="Cancelado">Cancelado</option>
+            </select>
+            <button onclick="buscarPedidoConsulta()">Buscar Pedido</button>
+        </div>
 
-  <select id="filtro-status-pedido" onchange="atualizarFiltroStatus()">
-    <option value="">Todos os status</option>
-    <option value="Pendente">Pendente</option>
-    <option value="Em trânsito">Em trânsito</option>
-    <option value="Entregue">Entregue</option>
-    <option value="Cancelado">Cancelado</option>
-</select>
+        <div id="resultado-pedido-consulta" class="form-box" style="display:none;">
+            <h3>Dados do Pedido</h3>
+        </div>
 
-<button onclick="buscarPedidoConsulta()">Buscar Pedido</button>
-
-    <div id="resultado-pedido-consulta" class="form-box" style="display:none; margin-top:20px;">
-        <h4>Dados do Pedido</h4>
+        <div class="table-wrapper" style="margin-top:20px;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Entregador</th>
+                        <th>Encomenda</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-pedidos-dados">
+                    <tr><td colspan="6">Carregando...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 </div>
