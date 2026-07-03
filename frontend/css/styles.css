@@ -77,6 +77,40 @@ section h3 {
     backdrop-filter: blur(12px);
 }
 
+.header nav > div {
+  margin-left: auto;
+}
+
+.header nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header nav ul {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.buttonLogout {
+  margin-left: 20px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #e74c3c;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.buttonLogout:hover {
+  background: #c0392b;
+}
+
 .header .container {
     display: flex;
     align-items: center;
@@ -496,3 +530,4 @@ section h3 {
     text-align: center;
     margin-top: 0.5em;
 }
+

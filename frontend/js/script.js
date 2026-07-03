@@ -14,6 +14,11 @@ function authHeaders(extra = {}) {
     return headers;
 }
 
+function logout(logout) {
+  localStorage.removeItem('token');
+  location.reload();
+}
+
 function setActiveNav(idDestino) {
     document.querySelectorAll('.header nav a').forEach(a => a.classList.remove('active'));
     const link = document.querySelector(`.header nav a[href="#${idDestino}"]`);
@@ -423,10 +428,10 @@ async function cadastrarPedido() {
         method: 'POST',
         headers: authHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
-            id_cliente: document.getElementById('p-id-cliente').value.trim(),
-            id_entregador: document.getElementById('p-id-entregador').value.trim(),
-            id_encomenda: document.getElementById('p-id-encomenda').value.trim(),
-            status: document.getElementById('p-status').value
+            id_cliente: document.getElementById('p-id-cliente').value.trim().toUpperCase(),
+            id_entregador: document.getElementById('p-id-entregador').value.trim().toUpperCase(),
+            id_encomenda: document.getElementById('p-id-encomenda').value.trim().toUpperCase(),
+            status: document.getElementById('p-status').value.trim()
         })
     });
 

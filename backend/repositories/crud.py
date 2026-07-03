@@ -115,15 +115,16 @@ def create_encomenda(nome: str, quantidade: int) -> Dict[str, Any]:
 
 def create_pedido(id_cliente: str, id_entregador: str, id_encomenda: str, status: str) -> Dict[str, Any]:
     cliente = _buscar_por_codigo(clientes, id_cliente)
-    entregador = _buscar_por_codigo(entregadores, id_entregador)
-    encomenda = _buscar_por_codigo(encomendas, id_encomenda)
-
     if not cliente:
-        raise HTTPException(status_code=404, detail="Cliente não encontrado")
+        raise HTTPException(status_code=404, detail=f"Cliente '{id_cliente}' não encontrado no sistema")
+
+    entregador = _buscar_por_codigo(entregadores, id_entregador)
     if not entregador:
-        raise HTTPException(status_code=404, detail="Entregador não encontrado")
+        raise HTTPException(status_code=404, detail=f"Entregador '{id_entregador}' não encontrado no sistema")
+
+    encomenda = _buscar_por_codigo(encomendas, id_encomenda)
     if not encomenda:
-        raise HTTPException(status_code=404, detail="Encomenda não encontrada")
+        raise HTTPException(status_code=404, detail=f"Encomenda '{id_encomenda}' não encontrada no sistema")
 
     pedido = {
         "id_cliente": cliente["codigo_identificacao"],
@@ -224,8 +225,8 @@ def read_encomenda(id_encomenda: str) -> Dict[str, Any]:
     return convertId(result)
 
 
-def read_pedido(id_pedido: str) -> Dict[str, Any]:
-    result = pedidos.find_one({"_id": validar_id(id_pedido)})
+def read_pedido(codigo_identificacao: str) -> Dict[str, Any]:
+    result = pedidos.find_one({"codigo_identificacao": codigo_identificacao.strip().upper()})
     if not result:
         raise HTTPException(status_code=404, detail="Pedido não encontrado")
     pedido = convertId(result)
@@ -286,7 +287,7 @@ def update_encomenda(id_encomenda: str, nome: Optional[str] = None, quantidade: 
     return {"message": "Encomenda atualizada com sucesso!"}
 
 
-def update_pedido(id_pedido: str, id_cliente: Optional[str] = None, id_entregador: Optional[str] = None, id_encomenda: Optional[str] = None, status: Optional[str] = None) -> Dict[str, str]:
+def update_pedido(codigo_identificacao: str, id_cliente: Optional[str] = None, id_entregador: Optional[str] = None, id_encomenda: Optional[str] = None, status: Optional[str] = None) -> Dict[str, str]:
     update_fields = {}
     if id_cliente:
         cliente = _buscar_por_codigo(clientes, id_cliente)
@@ -312,7 +313,10 @@ def update_pedido(id_pedido: str, id_cliente: Optional[str] = None, id_entregado
     if not update_fields:
         raise HTTPException(status_code=400, detail="Nenhum campo modificado para atualização.")
 
-    result = pedidos.update_one({"_id": validar_id(id_pedido)}, {"$set": update_fields})
+    result = pedidos.update_one(
+        {"codigo_identificacao": codigo_identificacao.strip().upper()},
+        {"$set": update_fields}
+    )
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Pedido não encontrado")
     return {"message": "Pedido atualizado com sucesso!"}
@@ -339,8 +343,8 @@ def drop_encomenda(id_encomenda: str) -> Dict[str, str]:
     return {"message": "Encomenda deletada com sucesso!"}
 
 
-def drop_pedido(id_pedido: str) -> Dict[str, str]:
-    result = pedidos.delete_one({"_id": validar_id(id_pedido)})
+def drop_pedido(codigo_identificacao: str) -> Dict[str, str]:
+    result = pedidos.delete_one({"codigo_identificacao": codigo_identificacao.strip().upper()})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Pedido não encontrado")
     return {"message": "Pedido deletado com sucesso!"}
