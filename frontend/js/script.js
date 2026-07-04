@@ -1,5 +1,18 @@
 const API = 'http://127.0.0.1:8000';
 
+
+function carregarConteudo(pagina) {
+            // Define o caminho do arquivo (ajuste se os arquivos estiverem em outra pasta)
+const url = `${pagina}.html`;
+
+fetch(url)
+    .then(response => response.text())
+    .then(html => {
+        document.getElementById('area-listagem').innerHTML = html;
+    })
+    .catch(error => console.error('Erro ao carregar:', error));
+}
+
 if (typeof chartProdutividade === 'undefined') {
     var chartProdutividade = null;
 }

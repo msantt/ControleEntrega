@@ -12,6 +12,32 @@
     <title>Controle Entregas</title>
 </head>
 <body>
-    
+
+    <div class="container">
+        <!-- Sidebar: Navegação lateral -->
+        <nav class="sidebar">
+            <div class="logo">Santos Delivery</div>
+            <div class="menu">
+                <a href="#" onclick="carregarConteudo('consulta')">Consulta</a>
+                <a href="#" onclick="carregarConteudo('cadastros')">Cadastros</a>
+                <a href="#" onclick="carregarConteudo('graficos')">Gráficos</a>
+                <a href="#" onclick="carregarConteudo('atualizar')">Atualizar</a>
+            </div>
+        </nav>
+
+        <!-- Área de conteúdo principal -->
+        <main class="conteudo-principal">
+            <header class="header-topo">
+                <h1>Painel de Controle</h1>
+            </header>
+            
+            <!-- Aqui o conteúdo será carregado -->
+            <div id="area-listagem" class="area-listagem">
+                <p>Selecione uma opção no menu lateral.</p>
+            </div>
+        </main>
+    </div>
+
+<script src="js/script.js"></script>
 </body>
 </html>
